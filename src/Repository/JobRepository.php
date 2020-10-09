@@ -14,7 +14,7 @@ class JobRepository extends EntityRepository
      *
      * @return Job[]
      */
-    public function findActiveJobs(int $categoryId = null)
+    public function findActiveJobs(int $categoryId = null): array
     {
         $qb = $this->createQueryBuilder('j')
             ->where('j.expiresAt > :date')
@@ -27,5 +27,21 @@ class JobRepository extends EntityRepository
         }
 
         return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return Job|null
+     */
+    public function findActiveJob(int $id) : ?Job
+    {
+        return $this->createQueryBuilder('j')
+            ->where('j.id = :id')
+            ->andWhere('j.expiresAt > :date')
+            ->setParameter('id', $id)
+            ->setParameter('date', new \DateTime())
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }
