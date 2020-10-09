@@ -10,6 +10,7 @@ use App\Form\JobType;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -39,11 +40,11 @@ class JobController extends AbstractController
     /**
      * Creates a new job entity.
      *
-     * @Route("/create", name="job.create", methods="GET")
+     * @Route("/create", name="job.create", methods={"GET", "POST"})
      *
      * @param Request $request
      * @param EntityManagerInterface $em
-     * @return Response
+     * @return RedirectResponse|Response
      */
     public function create(Request $request, EntityManagerInterface $em): Response
     {
