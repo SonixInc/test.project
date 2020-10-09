@@ -4,6 +4,7 @@
 namespace App\Controller;
 
 
+use App\Entity\Category;
 use App\Entity\Job;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,10 +26,10 @@ class JobController extends AbstractController
      */
     public function list(EntityManagerInterface $em) : Response
     {
-        $jobs = $em->getRepository(Job::class)->findActiveJobs();
+        $categories = $em->getRepository(Category::class)->findWithActiveJobs();
 
         return $this->render('job/list.html.twig', [
-            'jobs' => $jobs,
+            'categories' => $categories,
         ]);
     }
 
