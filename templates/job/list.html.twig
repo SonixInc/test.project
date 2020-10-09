@@ -14,7 +14,7 @@
             </thead>
 
             <tbody>
-            {% for job in category.activeJobs %}
+            {% for job in category.activeJobs|slice(0, max_jobs_on_homepage) %}
                 <tr>
                     <td>{{ job.location }}</td>
                     <td>
