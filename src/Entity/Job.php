@@ -12,6 +12,16 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Job
 {
+    public const FULL_TIME_TYPE = 'full-time';
+    public const PART_TIME_TYPE = 'part-time';
+    public const FREELANCE_TYPE = 'freelance';
+
+    public const TYPES = [
+        self::FULL_TIME_TYPE,
+        self::PART_TIME_TYPE,
+        self::FREELANCE_TYPE,
+    ];
+
     /**
      * @var int
      *
@@ -137,7 +147,7 @@ class Job
     /**
      * @return int
      */
-    public function getId() : int
+    public function getId() : ?int
     {
         return $this->id;
     }
@@ -145,7 +155,7 @@ class Job
     /**
      * @return string
      */
-    public function getType() : string
+    public function getType() : ?string
     {
         return $this->type;
     }
@@ -164,7 +174,7 @@ class Job
     /**
      * @return string
      */
-    public function getCompany() : string
+    public function getCompany() : ?string
     {
         return $this->company;
     }
@@ -221,7 +231,7 @@ class Job
     /**
      * @return string
      */
-    public function getPosition() : string
+    public function getPosition() : ?string
     {
         return $this->position;
     }
@@ -240,7 +250,7 @@ class Job
     /**
      * @return string
      */
-    public function getLocation() : string
+    public function getLocation() : ?string
     {
         return $this->location;
     }
@@ -259,7 +269,7 @@ class Job
     /**
      * @return string
      */
-    public function getDescription() : string
+    public function getDescription() : ?string
     {
         return $this->description;
     }
@@ -279,7 +289,7 @@ class Job
     /**
      * @return string
      */
-    public function getHowToApply() : string
+    public function getHowToApply() : ?string
     {
         return $this->howToApply;
     }
@@ -299,7 +309,7 @@ class Job
     /**
      * @return string
      */
-    public function getToken() : string
+    public function getToken() : ?string
     {
         return $this->token;
     }
@@ -318,7 +328,7 @@ class Job
     /**
      * @return bool
      */
-    public function isPublic() : bool
+    public function isPublic() : ?bool
     {
         return $this->public;
     }
@@ -337,7 +347,7 @@ class Job
     /**
      * @return bool
      */
-    public function isActivated() : bool
+    public function isActivated() : ?bool
     {
         return $this->activated;
     }
@@ -356,7 +366,7 @@ class Job
     /**
      * @return string
      */
-    public function getEmail() : string
+    public function getEmail() : ?string
     {
         return $this->email;
     }
@@ -375,7 +385,7 @@ class Job
     /**
      * @return \DateTime
      */
-    public function getExpiresAt() : \DateTime
+    public function getExpiresAt() : ?\DateTime
     {
         return $this->expiresAt;
     }
@@ -394,7 +404,7 @@ class Job
     /**
      * @return \DateTime
      */
-    public function getCreatedAt() : \DateTime
+    public function getCreatedAt() : ?\DateTime
     {
         return $this->createdAt;
     }
@@ -410,7 +420,7 @@ class Job
     /**
      * @return Category
      */
-    public function getCategory() : Category
+    public function getCategory() : ?Category
     {
         return $this->category;
     }
