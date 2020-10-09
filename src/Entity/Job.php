@@ -6,7 +6,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="App\Repository\JobRepository")
  * @ORM\Table(name="jobs")
  * @ORM\HasLifecycleCallbacks()
  */
@@ -433,6 +433,10 @@ class Job
     {
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
+
+        if (!$this->expiresAt) {
+            $this->expiresAt = (clone $this->createdAt)->modify('+30 days');
+        }
     }
 
     /**

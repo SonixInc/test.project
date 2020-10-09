@@ -4,6 +4,7 @@
 namespace App\DataFixtures;
 
 
+use App\Entity\Category;
 use App\Entity\Job;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -19,7 +20,9 @@ class JobFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager) : void
     {
         $jobSensioLabs = new Job();
-        $jobSensioLabs->setCategory($manager->merge($this->getReference('category-programming')));
+        /** @var Category $categoryProgramming */
+        $categoryProgramming = $manager->merge($this->getReference('category-programming'));
+        $jobSensioLabs->setCategory($categoryProgramming);
         $jobSensioLabs->setType('full-time');
         $jobSensioLabs->setCompany('Sensio Labs');
         $jobSensioLabs->setLogo('sensio-labs.gif');
@@ -35,7 +38,9 @@ class JobFixtures extends Fixture implements DependentFixtureInterface
         $jobSensioLabs->setExpiresAt(new \DateTime('+30 days'));
 
         $jobExtremeSensio = new Job();
-        $jobExtremeSensio->setCategory($manager->merge($this->getReference('category-design')));
+        /** @var Category $categoryDesign */
+        $categoryDesign = $manager->merge($this->getReference('category-design'));
+        $jobExtremeSensio->setCategory($categoryDesign);
         $jobExtremeSensio->setType('part-time');
         $jobExtremeSensio->setCompany('Extreme Sensio');
         $jobExtremeSensio->setLogo('extreme-sensio.gif');
@@ -50,8 +55,27 @@ class JobFixtures extends Fixture implements DependentFixtureInterface
         $jobExtremeSensio->setEmail('job@example.com');
         $jobExtremeSensio->setExpiresAt(new \DateTime('+30 days'));
 
+        $jobExpired = new Job();
+        /** @var Category $categoryProgramming */
+        $categoryProgramming = $manager->merge($this->getReference('category-programming'));
+        $jobExpired->setCategory($categoryProgramming);
+        $jobExpired->setType('full-time');
+        $jobExpired->setCompany('Sensio Labs');
+        $jobExpired->setLogo('sensio-labs.gif');
+        $jobExpired->setUrl('http://www.sensiolabs.com/');
+        $jobExpired->setPosition('Web Developer Expired');
+        $jobExpired->setLocation('Paris, France');
+        $jobExpired->setDescription('Lorem ipsum dolor sit amet, consectetur adipisicing elit.');
+        $jobExpired->setHowToApply('Send your resume to lorem.ipsum [at] dolor.sit');
+        $jobExpired->setPublic(true);
+        $jobExpired->setActivated(true);
+        $jobExpired->setToken('job_expired');
+        $jobExpired->setEmail('job@example.com');
+        $jobExpired->setExpiresAt(new \DateTime('-10 days'));
+
         $manager->persist($jobSensioLabs);
         $manager->persist($jobExtremeSensio);
+        $manager->persist($jobExpired);
 
         $manager->flush();
     }
