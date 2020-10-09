@@ -7,3 +7,4 @@ twig:
         - 'bootstrap_4_layout.html.twig'
     globals:
         max_jobs_on_homepage: '%max_jobs_on_homepage%'
+        jobs_web_directory: '%jobs_web_directory%'
