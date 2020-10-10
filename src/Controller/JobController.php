@@ -68,7 +68,10 @@ class JobController extends AbstractController
             $em->persist($job);
             $em->flush();
 
-            return $this->redirectToRoute('job.list');
+            return $this->redirectToRoute(
+                'job.preview',
+                ['token' => $job->getToken()]
+            );
         }
 
         return $this->render('job/create.html.twig', [
@@ -95,7 +98,10 @@ class JobController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $em->flush();
 
-            return $this->redirectToRoute('job.list');
+            return $this->redirectToRoute(
+                'job.preview',
+                ['token' => $job->getToken()]
+            );
         }
 
         return $this->render('job/edit.html.twig', [
@@ -117,6 +123,23 @@ class JobController extends AbstractController
     {
         return $this->render('job/show.html.twig', [
             'job' => $job,
+        ]);
+    }
+
+    /**
+     * Finds and displays the preview page for a job entity.
+     *
+     * @Route("/{token}", name="job.preview", methods="GET", requirements={"token" = "\w+"})
+     *
+     * @param Job $job
+     *
+     * @return Response
+     */
+    public function preview(Job $job) : Response
+    {
+        return $this->render('job/show.html.twig', [
+            'job' => $job,
+            'hasControlAccess' => true,
         ]);
     }
 }
