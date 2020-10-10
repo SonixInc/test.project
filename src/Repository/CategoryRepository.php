@@ -14,13 +14,15 @@ class CategoryRepository extends EntityRepository
     /**
      * @return Category[]
      */
-    public function findWithActiveJobs()
+    public function findWithActiveJobs(): array
     {
         return $this->createQueryBuilder('c')
             ->select('c')
             ->innerJoin('c.jobs', 'j')
             ->where('j.expiresAt > :date')
+            ->where('j.activated = :activated')
             ->setParameter('date', new \DateTime())
+            ->setParameter('activated', true)
             ->getQuery()
             ->getResult();
     }

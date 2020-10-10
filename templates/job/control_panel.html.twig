@@ -6,12 +6,12 @@
 
         <div class="collapse navbar-collapse">
             {{ form_start(deleteForm, {'attr': {'class': 'navbar-form navbar-left'}}) }}
-            {{ form_widget(deleteForm) }}
+                {{ form_widget(deleteForm) }}
 
-            <button type="submit" class="btn btn-default" onclick="return confirm('Are you sure?')">
-                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                Delete
-            </button>
+                <button type="submit" class="btn btn-default" onclick="return confirm('Are you sure?')">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                    Delete
+                </button>
             {{ form_end(deleteForm) }}
 
             {% if job.activated %}
@@ -33,10 +33,14 @@
                     Edit
                 </a>
 
-                <a class="btn btn-default navbar-btn" href="#">
-                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                    Publish
-                </a>
+                {{ form_start(publishForm, {'attr': {'class': 'navbar-form navbar-left'}}) }}
+                    {{ form_widget(publishForm) }}
+
+                    <button type="submit" class="btn btn-default">
+                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        Publish
+                    </button>
+                {{ form_end(publishForm) }}
             {% endif %}
 
             <p class="navbar-text navbar-right">
