@@ -20,7 +20,7 @@ class CategoryRepository extends EntityRepository
             ->select('c')
             ->innerJoin('c.jobs', 'j')
             ->where('j.expiresAt > :date')
-            ->where('j.activated = :activated')
+            ->andWhere('j.activated = :activated')
             ->setParameter('date', new \DateTime())
             ->setParameter('activated', true)
             ->getQuery()
