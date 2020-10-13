@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * Affiliate entity
+ *
  * @ORM\Entity()
  * @ORM\Table(name="affiliates")
  * @ORM\HasLifecycleCallbacks()

@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
+ * Job entity
+ *
  * @ORM\Entity(repositoryClass="App\Repository\JobRepository")
  * @ORM\Table(name="jobs")
  * @ORM\HasLifecycleCallbacks()
@@ -157,7 +159,7 @@ class Job
     /**
      * @return int
      */
-    public function getId() : ?int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -165,16 +167,17 @@ class Job
     /**
      * @return string
      */
-    public function getType() : ?string
+    public function getType(): ?string
     {
         return $this->type;
     }
 
     /**
      * @param string $type
+     *
      * @return self
      */
-    public function setType(string $type) : self
+    public function setType(string $type): self
     {
         $this->type = $type;
 
@@ -184,16 +187,17 @@ class Job
     /**
      * @return string
      */
-    public function getCompany() : ?string
+    public function getCompany(): ?string
     {
         return $this->company;
     }
 
     /**
      * @param string $company
+     *
      * @return self
      */
-    public function setCompany(string $company) : self
+    public function setCompany(string $company): self
     {
         $this->company = $company;
 
@@ -210,9 +214,10 @@ class Job
 
     /**
      * @param string|null|UploadedFile $logo
+     *
      * @return self
      */
-    public function setLogo($logo) : self
+    public function setLogo($logo): self
     {
         $this->logo = $logo;
 
@@ -229,6 +234,7 @@ class Job
 
     /**
      * @param File|null $logo
+     *
      * @return self
      */
     public function setLogoFile(File $logo = null): self
@@ -245,16 +251,17 @@ class Job
     /**
      * @return string|null
      */
-    public function getUrl() : ?string
+    public function getUrl(): ?string
     {
         return $this->url;
     }
 
     /**
      * @param string|null $url
+     *
      * @return self
      */
-    public function setUrl(?string $url) : self
+    public function setUrl(?string $url): self
     {
         $this->url = $url;
 
@@ -264,16 +271,17 @@ class Job
     /**
      * @return string
      */
-    public function getPosition() : ?string
+    public function getPosition(): ?string
     {
         return $this->position;
     }
 
     /**
      * @param string $position
+     *
      * @return self
      */
-    public function setPosition(string $position) : self
+    public function setPosition(string $position): self
     {
         $this->position = $position;
 
@@ -283,16 +291,17 @@ class Job
     /**
      * @return string
      */
-    public function getLocation() : ?string
+    public function getLocation(): ?string
     {
         return $this->location;
     }
 
     /**
      * @param string $location
+     *
      * @return self
      */
-    public function setLocation(string $location) : self
+    public function setLocation(string $location): self
     {
         $this->location = $location;
 
@@ -302,7 +311,7 @@ class Job
     /**
      * @return string
      */
-    public function getDescription() : ?string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -312,7 +321,7 @@ class Job
      *
      * @return self
      */
-    public function setDescription(string $description) : self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -322,7 +331,7 @@ class Job
     /**
      * @return string
      */
-    public function getHowToApply() : ?string
+    public function getHowToApply(): ?string
     {
         return $this->howToApply;
     }
@@ -332,7 +341,7 @@ class Job
      *
      * @return self
      */
-    public function setHowToApply(string $howToApply) : self
+    public function setHowToApply(string $howToApply): self
     {
         $this->howToApply = $howToApply;
 
@@ -342,16 +351,17 @@ class Job
     /**
      * @return string
      */
-    public function getToken() : ?string
+    public function getToken(): ?string
     {
         return $this->token;
     }
 
     /**
      * @param string $token
+     *
      * @return self
      */
-    public function setToken(string $token) : self
+    public function setToken(string $token): self
     {
         $this->token = $token;
 
@@ -361,16 +371,17 @@ class Job
     /**
      * @return bool
      */
-    public function isPublic() : ?bool
+    public function isPublic(): ?bool
     {
         return $this->public;
     }
 
     /**
      * @param bool $public
+     *
      * @return self
      */
-    public function setPublic(bool $public) : self
+    public function setPublic(bool $public): self
     {
         $this->public = $public;
 
@@ -380,16 +391,17 @@ class Job
     /**
      * @return bool
      */
-    public function isActivated() : ?bool
+    public function isActivated(): ?bool
     {
         return $this->activated;
     }
 
     /**
      * @param bool $activated
+     *
      * @return self
      */
-    public function setActivated(bool $activated) : self
+    public function setActivated(bool $activated): self
     {
         $this->activated = $activated;
 
@@ -399,16 +411,17 @@ class Job
     /**
      * @return string
      */
-    public function getEmail() : ?string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
 
     /**
      * @param string $email
+     *
      * @return self
      */
-    public function setEmail(string $email) : self
+    public function setEmail(string $email): self
     {
         $this->email = $email;
 
@@ -418,16 +431,17 @@ class Job
     /**
      * @return \DateTime
      */
-    public function getExpiresAt() : ?\DateTime
+    public function getExpiresAt(): ?\DateTime
     {
         return $this->expiresAt;
     }
 
     /**
      * @param \DateTime $expiresAt
+     *
      * @return self
      */
-    public function setExpiresAt(\DateTime $expiresAt) : self
+    public function setExpiresAt(\DateTime $expiresAt): self
     {
         $this->expiresAt = $expiresAt;
 
@@ -437,7 +451,7 @@ class Job
     /**
      * @return \DateTime
      */
-    public function getCreatedAt() : ?\DateTime
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
     }
@@ -445,7 +459,7 @@ class Job
     /**
      * @return \DateTime
      */
-    public function getUpdatedAt() : ?\DateTime
+    public function getUpdatedAt(): ?\DateTime
     {
         return $this->updatedAt;
     }
@@ -453,16 +467,17 @@ class Job
     /**
      * @return Category
      */
-    public function getCategory() : ?Category
+    public function getCategory(): ?Category
     {
         return $this->category;
     }
 
     /**
      * @param Category $category
+     *
      * @return self
      */
-    public function setCategory(Category $category) : self
+    public function setCategory(Category $category): self
     {
         $this->category = $category;
 

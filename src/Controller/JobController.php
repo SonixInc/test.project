@@ -29,8 +29,9 @@ class JobController extends AbstractController
      *
      * @Route("/", name="job.list", methods="GET")
      *
-     * @param EntityManagerInterface $em
-     * @param JobHistoryService $jobHistoryService
+     * @param EntityManagerInterface $em                Entity manager
+     * @param JobHistoryService      $jobHistoryService Job history service
+     *
      * @return Response
      */
     public function list(EntityManagerInterface $em, JobHistoryService $jobHistoryService): Response
@@ -38,7 +39,7 @@ class JobController extends AbstractController
         $categories = $em->getRepository(Category::class)->findWithActiveJobs();
 
         return $this->render('job/list.html.twig', [
-            'categories' => $categories,
+            'categories'  => $categories,
             'historyJobs' => $jobHistoryService->getJobs(),
         ]);
     }
@@ -48,9 +49,10 @@ class JobController extends AbstractController
      *
      * @Route("/create", name="job.create", methods={"GET", "POST"})
      *
-     * @param Request $request
-     * @param EntityManagerInterface $em
-     * @param FileUploader $fileUploader
+     * @param Request                $request      Http request
+     * @param EntityManagerInterface $em           Entity manager
+     * @param FileUploader           $fileUploader File uploader
+     *
      * @return RedirectResponse|Response
      */
     public function create(Request $request, EntityManagerInterface $em, FileUploader $fileUploader): Response
@@ -88,13 +90,13 @@ class JobController extends AbstractController
      *
      * @Route("/{token}/edit", name="job.edit", methods={"GET", "POST"}, requirements={"token" = "\w+"})
      *
-     * @param Request $request
-     * @param Job $job
-     * @param EntityManagerInterface $em
+     * @param Request                $request Http request
+     * @param Job                    $job     Job entity
+     * @param EntityManagerInterface $em      Entity manager
      *
      * @return Response
      */
-    public function edit(Request $request, Job $job, EntityManagerInterface $em) : Response
+    public function edit(Request $request, Job $job, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(JobType::class, $job);
         $form->handleRequest($request);
@@ -118,13 +120,13 @@ class JobController extends AbstractController
      *
      * @Route("/{token}/delete", name="job.delete", methods="DELETE", requirements={"token" = "\w+"})
      *
-     * @param Request $request
-     * @param Job $job
-     * @param EntityManagerInterface $em
+     * @param Request                $request Http request
+     * @param Job                    $job     Job entity
+     * @param EntityManagerInterface $em      Entity manager
      *
      * @return Response
      */
-    public function delete(Request $request, Job $job, EntityManagerInterface $em) : Response
+    public function delete(Request $request, Job $job, EntityManagerInterface $em): Response
     {
         $form = $this->createDeleteForm($job);
         $form->handleRequest($request);
@@ -142,13 +144,13 @@ class JobController extends AbstractController
      *
      * @Route("/{token}/publish", name="job.publish", methods="POST", requirements={"token" = "\w+"})
      *
-     * @param Request $request
-     * @param Job $job
-     * @param EntityManagerInterface $em
+     * @param Request                $request Http request
+     * @param Job                    $job     Job entity
+     * @param EntityManagerInterface $em      Entity manager
      *
      * @return Response
      */
-    public function publish(Request $request, Job $job, EntityManagerInterface $em) : Response
+    public function publish(Request $request, Job $job, EntityManagerInterface $em): Response
     {
         $form = $this->createPublishForm($job);
         $form->handleRequest($request);
@@ -173,11 +175,12 @@ class JobController extends AbstractController
      * @Route("/{id}", name="job.show", requirements={"id" = "\d+"})
      * @Entity("job", expr="repository.findActiveJob(id)")
      *
-     * @param Job $job
-     * @param JobHistoryService $jobHistoryService
+     * @param Job               $job               Job entity
+     * @param JobHistoryService $jobHistoryService Job history
+     *
      * @return Response
      */
-    public function show(Job $job, JobHistoryService $jobHistoryService) : Response
+    public function show(Job $job, JobHistoryService $jobHistoryService): Response
     {
         $jobHistoryService->addJob($job);
 
@@ -191,31 +194,31 @@ class JobController extends AbstractController
      *
      * @Route("/{token}", name="job.preview", methods="GET", requirements={"token" = "\w+"})
      *
-     * @param Job $job
+     * @param Job $job Job entity
      *
      * @return Response
      */
-    public function preview(Job $job) : Response
+    public function preview(Job $job): Response
     {
         $deleteForm = $this->createDeleteForm($job);
         $publishForm = $this->createPublishForm($job);
 
         return $this->render('job/show.html.twig', [
-            'job' => $job,
+            'job'              => $job,
             'hasControlAccess' => true,
-            'deleteForm' => $deleteForm->createView(),
-            'publishForm' => $publishForm->createView(),
+            'deleteForm'       => $deleteForm->createView(),
+            'publishForm'      => $publishForm->createView(),
         ]);
     }
 
     /**
      * Creates a form to delete a job entity.
      *
-     * @param Job $job
+     * @param Job $job Job entity
      *
      * @return FormInterface
      */
-    private function createDeleteForm(Job $job) : FormInterface
+    private function createDeleteForm(Job $job): FormInterface
     {
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('job.delete', ['token' => $job->getToken()]))
@@ -226,11 +229,11 @@ class JobController extends AbstractController
     /**
      * Creates a form to publish a job entity.
      *
-     * @param Job $job
+     * @param Job $job Job entity
      *
      * @return FormInterface
      */
-    private function createPublishForm(Job $job) : FormInterface
+    private function createPublishForm(Job $job): FormInterface
     {
         return $this->createFormBuilder(['token' => $job->getToken()])
             ->setAction($this->generateUrl('job.publish', ['token' => $job->getToken()]))

@@ -25,10 +25,11 @@ class CategoryController extends AbstractController
      *     requirements={"page" = "\d+"}
      * )
      *
-     * @param Category $category
-     * @param PaginatorInterface $paginator
-     * @param int $page
-     * @param JobHistoryService $jobHistoryService
+     * @param Category           $category          Category entity
+     * @param PaginatorInterface $paginator         Knp paginator
+     * @param int                $page              Page number
+     * @param JobHistoryService  $jobHistoryService Job history
+     *
      * @return Response
      */
     public function show(
@@ -36,7 +37,8 @@ class CategoryController extends AbstractController
         PaginatorInterface $paginator,
         int $page,
         JobHistoryService $jobHistoryService
-    ) : Response {
+    ): Response
+    {
         $activeJobs = $paginator->paginate(
             $this->getDoctrine()->getRepository(Job::class)->getPaginatedActiveJobsByCategoryQuery($category),
             $page,
@@ -44,8 +46,8 @@ class CategoryController extends AbstractController
         );
 
         return $this->render('category/show.html.twig', [
-            'category' => $category,
-            'activeJobs' => $activeJobs,
+            'category'    => $category,
+            'activeJobs'  => $activeJobs,
             'historyJobs' => $jobHistoryService->getJobs(),
         ]);
     }

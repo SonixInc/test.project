@@ -5,6 +5,7 @@ twig:
     exception_controller: null
     form_themes:
         - 'bootstrap_4_layout.html.twig'
+        - 'VichUploaderBundle:Form:fields.html.twig'
     globals:
         max_jobs_on_homepage: '%max_jobs_on_homepage%'
         jobs_web_directory: '%jobs_web_directory%'
