@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
+ * Category entity
+ *
  * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
  * @ORM\Table(name="categories")
  */
@@ -174,5 +176,26 @@ class Category
     public function setSlug(string $slug): void
     {
         $this->slug = $slug;
+    }
+
+    /**
+     * @return int
+     */
+    public function getJobCount(): int
+    {
+        return $this->jobs->count();
+    }
+
+    /**
+     * @return int
+     */
+    public function getAffiliateCount(): int
+    {
+        return $this->affiliates->count();
+    }
+
+    public function __toString(): string
+    {
+        return $this->name;
     }
 }
