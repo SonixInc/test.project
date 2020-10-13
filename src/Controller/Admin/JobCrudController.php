@@ -12,13 +12,23 @@ use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class JobCrudController extends AbstractCrudController
 {
+    /**
+     * Get entity name
+     *
+     * @return string
+     */
     public static function getEntityFqcn(): string
     {
         return Job::class;
     }
 
-
-
+    /**
+     * CRUD configuration
+     *
+     * @param Crud $crud
+     *
+     * @return Crud
+     */
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
@@ -26,6 +36,13 @@ class JobCrudController extends AbstractCrudController
             ->overrideTemplate('crud/index', 'bundles/easyadmin/index.html.twig');
     }
 
+    /**
+     * Fields configuration
+     *
+     * @param string $pageName
+     *
+     * @return iterable
+     */
     public function configureFields(string $pageName): iterable
     {
         $logoFile = Field\ImageField::new('logo', 'Logo')
@@ -64,6 +81,13 @@ class JobCrudController extends AbstractCrudController
         return $fields;
     }
 
+    /**
+     * Action configuration
+     *
+     * @param Actions $actions
+     *
+     * @return Actions
+     */
     public function configureActions(Actions $actions): Actions
     {
         return $actions

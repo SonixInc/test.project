@@ -9,11 +9,23 @@ use EasyCorp\Bundle\EasyAdminBundle\Field;
 
 class CategoryCrudController extends AbstractCrudController
 {
+    /**
+     * Get entity name
+     *
+     * @return string
+     */
     public static function getEntityFqcn(): string
     {
         return Category::class;
     }
 
+    /**
+     * Fields configuration
+     *
+     * @param string $pageName
+     *
+     * @return iterable
+     */
     public function configureFields(string $pageName): iterable
     {
         return [

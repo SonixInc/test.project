@@ -17,6 +17,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class DashboardController extends AbstractDashboardController
 {
     /**
+     * Redirect to job entities
+     *
      * @Route("/admin", name="admin")
      */
     public function index(): Response
@@ -26,12 +28,22 @@ class DashboardController extends AbstractDashboardController
         return $this->redirect($routeBuilder->setController(JobCrudController::class)->generateUrl());
     }
 
+    /**
+     * Dashboard configuration
+     *
+     * @return Dashboard
+     */
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
             ->setTitle('Work Com');
     }
 
+    /**
+     * Left menu configuration
+     *
+     * @return iterable
+     */
     public function configureMenuItems(): iterable
     {
         return [
