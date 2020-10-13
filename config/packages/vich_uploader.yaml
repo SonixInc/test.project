@@ -1,0 +1,7 @@
+vich_uploader:
+    db_driver: orm
+
+    mappings:
+        jobs:
+            uri_prefix: '%jobs_web_directory%'
+            upload_destination: '%jobs_directory%'

@@ -4,12 +4,15 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\JobRepository")
  * @ORM\Table(name="jobs")
  * @ORM\HasLifecycleCallbacks()
+ * @Vich\Uploadable()
  */
 class Job
 {
@@ -52,6 +55,12 @@ class Job
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $logo;
+
+    /**
+     * @var File
+     * @Vich\UploadableField(mapping="jobs", fileNameProperty="logo")
+     */
+    private $logoFile;
 
     /**
      * @var string|null
@@ -206,6 +215,29 @@ class Job
     public function setLogo($logo) : self
     {
         $this->logo = $logo;
+
+        return $this;
+    }
+
+    /**
+     * @return File
+     */
+    public function getLogoFile(): ?File
+    {
+        return $this->logoFile;
+    }
+
+    /**
+     * @param File|null $logo
+     * @return self
+     */
+    public function setLogoFile(File $logo = null): self
+    {
+        $this->logoFile = $logo;
+
+        if ($logo) {
+            $this->updatedAt = new \DateTime();
+        }
 
         return $this;
     }
