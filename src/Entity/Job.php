@@ -3,9 +3,12 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
@@ -15,6 +18,10 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @ORM\Table(name="jobs")
  * @ORM\HasLifecycleCallbacks()
  * @Vich\Uploadable()
+ * @ApiResource(
+ *     denormalizationContext={"groups"={"write"}},
+ *     paginationEnabled=false
+ * )
  */
 class Job
 {
@@ -41,6 +48,11 @@ class Job
      * @var string
      *
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups("write")
+     *
+     * @Assert\NotBlank()
+     * @Assert\Length(max="255")
      */
     private $type;
 
@@ -48,6 +60,11 @@ class Job
      * @var string
      *
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups("write")
+     *
+     * @Assert\NotBlank()
+     * @Assert\Length(max="255")
      */
     private $company;
 
@@ -55,12 +72,17 @@ class Job
      * @var string|null|UploadedFile
      *
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @Assert\Length(max="255")
+     *
      */
     private $logo;
 
     /**
      * @var File
      * @Vich\UploadableField(mapping="jobs", fileNameProperty="logo")
+     *
+     * @Groups("write")
      */
     private $logoFile;
 
@@ -68,6 +90,10 @@ class Job
      * @var string|null
      *
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @Groups("write")
+     *
+     * @Assert\Length(max="255")
      */
     private $url;
 
@@ -75,6 +101,11 @@ class Job
      * @var string
      *
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups("write")
+     *
+     * @Assert\NotBlank()
+     * @Assert\Length(max="255")
      */
     private $position;
 
@@ -82,6 +113,11 @@ class Job
      * @var string
      *
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups("write")
+     *
+     * @Assert\NotBlank()
+     * @Assert\Length(max="255")
      */
     private $location;
 
@@ -89,6 +125,11 @@ class Job
      * @var string
      *
      * @ORM\Column(type="text")
+     *
+     * @Groups("write")
+     *
+     * @Assert\NotBlank()
+     * @Assert\Length(max="255")
      */
     private $description;
 
@@ -96,6 +137,11 @@ class Job
      * @var string
      *
      * @ORM\Column(type="text")
+     *
+     * @Groups("write")
+     *
+     * @Assert\NotBlank()
+     * @Assert\Length(max="255")
      */
     private $howToApply;
 
@@ -110,6 +156,10 @@ class Job
      * @var bool
      *
      * @ORM\Column(type="boolean")
+     *
+     * @Groups("write")
+     *
+     * @Assert\NotBlank()
      */
     private $public;
 
@@ -117,6 +167,10 @@ class Job
      * @var bool
      *
      * @ORM\Column(type="boolean")
+     *
+     * @Groups("write")
+     *
+     * @Assert\NotBlank()
      */
     private $activated;
 
@@ -124,6 +178,11 @@ class Job
      * @var string
      *
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups("write")
+     *
+     * @Assert\NotBlank()
+     * @Assert\Length(max="255")
      */
     private $email;
 
@@ -153,6 +212,11 @@ class Job
      *
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="jobs")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=false)
+     *
+     * @Groups("write")
+     *
+     * @Assert\NotBlank()
+     * @Assert\Type(type="App\Entity\Category")
      */
     private $category;
 
