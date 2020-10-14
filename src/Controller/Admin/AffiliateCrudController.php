@@ -8,8 +8,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Validator\Constraints\NotBlank;
 
 class AffiliateCrudController extends AbstractCrudController
 {
@@ -36,7 +34,7 @@ class AffiliateCrudController extends AbstractCrudController
         return [
             Field\EmailField::new('email'),
             Field\UrlField::new('url', 'URL'),
-            Field\BooleanField::new('active'),
+            Field\BooleanField::new('active')->renderAsSwitch(false),
             Field\AssociationField::new('categories')->renderAsNativeWidget()->hideOnIndex()
         ];
     }
