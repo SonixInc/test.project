@@ -4,15 +4,20 @@
 namespace App\Entity;
 
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Affiliate entity
  *
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="App\Repository\AffiliateRepository")
  * @ORM\Table(name="affiliates")
  * @ORM\HasLifecycleCallbacks()
+ * @ApiResource(
+ *     collectionOperations={},
+ *     itemOperations={"GET"}
+ * )
  */
 class Affiliate
 {
@@ -43,6 +48,7 @@ class Affiliate
      * @var string
      *
      * @ORM\Column(type="string", length=255, unique=true)
+     *
      */
     private $token;
 

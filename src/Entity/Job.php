@@ -3,6 +3,7 @@
 
 namespace App\Entity;
 
+use App\Controller\Api\Job\JobController;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
@@ -18,10 +19,6 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @ORM\Table(name="jobs")
  * @ORM\HasLifecycleCallbacks()
  * @Vich\Uploadable()
- * @ApiResource(
- *     denormalizationContext={"groups"={"write"}},
- *     paginationEnabled=false
- * )
  */
 class Job
 {

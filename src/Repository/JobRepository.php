@@ -4,10 +4,12 @@
 namespace App\Repository;
 
 
+use App\Entity\Affiliate;
 use App\Entity\Category;
 use App\Entity\Job;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 
 class JobRepository extends EntityRepository
 {
@@ -37,6 +39,7 @@ class JobRepository extends EntityRepository
      * @param int $id
      *
      * @return Job|null
+     * @throws NonUniqueResultException Throws when there are more than one result
      */
     public function findActiveJob(int $id) : ?Job
     {
@@ -66,5 +69,26 @@ class JobRepository extends EntityRepository
             ->setParameter('date', new \DateTime())
             ->setParameter('activated', true)
             ->getQuery();
+    }
+
+    /**
+     * @param Affiliate $affiliate
+     *
+     * @return Job[]
+     */
+    public function findActiveJobsForAffiliate(Affiliate $affiliate): array
+    {
+        return $this->createQueryBuilder('j')
+            ->leftJoin('j.category', 'c')
+            ->leftJoin('c.affiliates', 'a')
+            ->where('a.id = :affiliate')
+            ->andWhere('j.expiresAt > :date')
+            ->andWhere('j.activated = :activated')
+            ->setParameter('affiliate', $affiliate)
+            ->setParameter('date', new \DateTime())
+            ->setParameter('activated', true)
+            ->orderBy('j.expiresAt', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 }
