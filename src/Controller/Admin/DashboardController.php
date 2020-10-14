@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Affiliate;
 use App\Entity\Category;
 use App\Entity\Job;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -52,6 +53,7 @@ class DashboardController extends AbstractDashboardController
             MenuItem::section('Job'),
             MenuItem::linkToCrud('Categories', 'fa fa-tags', Category::class),
             MenuItem::linkToCrud('Jobs', 'fa fa-file-text', Job::class),
+            MenuItem::linkToCrud('Affiliates', 'fa fa-grip-vertical', Affiliate::class),
         ];
     }
 }
