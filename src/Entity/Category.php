@@ -8,16 +8,13 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Category entity
  *
  * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
  * @ORM\Table(name="categories")
- * @ApiResource(
- *     collectionOperations={"GET"},
- *     itemOperations={"GET"}
- * )
  */
 class Category
 {
@@ -34,6 +31,8 @@ class Category
      * @var string
      *
      * @ORM\Column(type="string", length=100)
+     *
+     * @Assert\NotBlank()
      */
     private $name;
 
@@ -69,7 +68,7 @@ class Category
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -84,6 +83,7 @@ class Category
 
     /**
      * @param string $name
+     *
      * @return self
      */
     public function setName(string $name): self
@@ -106,13 +106,14 @@ class Category
      */
     public function getActiveJobs()
     {
-        return $this->jobs->filter(function(Job $job) {
+        return $this->jobs->filter(function (Job $job) {
             return $job->getExpiresAt() > new \DateTime() && $job->isActivated();
         });
     }
 
     /**
      * @param Job $job
+     *
      * @return self
      */
     public function addJob(Job $job): self
@@ -126,9 +127,10 @@ class Category
 
     /**
      * @param Job $job
+     *
      * @return self
      */
-    public function removeJob(Job $job) : self
+    public function removeJob(Job $job): self
     {
         $this->jobs->removeElement($job);
 
@@ -145,9 +147,10 @@ class Category
 
     /**
      * @param Affiliate $affiliate
+     *
      * @return self
      */
-    public function addAffiliate(Affiliate $affiliate) : self
+    public function addAffiliate(Affiliate $affiliate): self
     {
         if (!$this->affiliates->contains($affiliate)) {
             $this->affiliates->add($affiliate);
@@ -158,9 +161,10 @@ class Category
 
     /**
      * @param Affiliate $affiliate
+     *
      * @return self
      */
-    public function removeAffiliate(Affiliate $affiliate) : self
+    public function removeAffiliate(Affiliate $affiliate): self
     {
         $this->affiliates->removeElement($affiliate);
 
@@ -170,7 +174,7 @@ class Category
     /**
      * @return string|null
      */
-    public function getSlug() : ?string
+    public function getSlug(): ?string
     {
         return $this->slug;
     }
