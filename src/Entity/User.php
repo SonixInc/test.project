@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -37,6 +38,18 @@ class User implements UserInterface
      */
     private $password;
 
+    /**
+     * @var ArrayCollection|Feedback[]
+     *
+     * @ORM\OneToMany(targetEntity="Feedback", mappedBy="user", cascade={"remove"})
+     */
+    private $feedbacks;
+
+    public function __construct()
+    {
+        $this->feedbacks = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -49,7 +62,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->username;
+        return (string)$this->username;
     }
 
     public function setUsername(string $username): self
@@ -83,7 +96,7 @@ class User implements UserInterface
      */
     public function getPassword(): string
     {
-        return (string) $this->password;
+        return (string)$this->password;
     }
 
     public function setPassword(string $password): self
@@ -108,5 +121,39 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Feedback[]|ArrayCollection
+     */
+    public function getFeedbacks(): array
+    {
+        return $this->feedbacks->toArray();
+    }
+
+    /**
+     * @param Feedback $feedback
+     *
+     * @return $this
+     */
+    public function addFeedback(Feedback $feedback): self
+    {
+        if (!$this->feedbacks->contains($feedback)) {
+            $this->feedbacks->add($feedback);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Feedback $feedback
+     *
+     * @return $this
+     */
+    public function removeFeedback(Feedback $feedback): self
+    {
+        $this->feedbacks->removeElement($feedback);
+
+        return $this;
     }
 }

@@ -72,6 +72,13 @@ class Company
     private $active;
 
     /**
+     * @var ArrayCollection|Feedback[]
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Feedback", mappedBy="company")
+     */
+    private $feedbacks;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
@@ -81,6 +88,7 @@ class Company
     public function __construct()
     {
         $this->jobs = new ArrayCollection();
+        $this->feedbacks = new ArrayCollection();
     }
 
     /**
