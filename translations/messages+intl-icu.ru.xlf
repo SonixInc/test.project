@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" target-language="ru" datatype="plaintext" original="file.ext">
+    <header>
+      <tool tool-id="symfony" tool-name="Symfony"/>
+    </header>
+    <body>
+      <trans-unit id="QkolUdN" resname="Expired">
+        <source>Expired</source>
+        <target>Время истекло</target>
+      </trans-unit>
+      <trans-unit id="pxofPGN" resname="[Bookmark this &lt;a href=&quot;{url}&quot;&gt;URL&lt;/a&gt; to manage this job in the future]">
+        <source>[Bookmark this &lt;a href="{url}"&gt;URL&lt;/a&gt; to manage this job in the future]</source>
+        <target><![CDATA[[Сохраните этот <a href="{url}">URL</a> в закладках, чтобы в дальнейшем редактировать данную вакансию]]]></target>
+      </trans-unit>
+      <trans-unit id="bVBmzKs" resname="Jobs in the %category% category">
+        <source>Jobs in the %category% category</source>
+        <target>Работы в %category% категории</target>
+      </trans-unit>
+      <trans-unit id="xqYQ02A" resname="Jobeet">
+        <source>Jobeet</source>
+        <target>Jobeet</target>
+      </trans-unit>
+      <trans-unit id="nWMiwfT" resname="Login">
+        <source>Login</source>
+        <target>Вход</target>
+      </trans-unit>
+      <trans-unit id="jC3twAE" resname="Admin Panel">
+        <source>Admin Panel</source>
+        <target>Панель администрирования</target>
+      </trans-unit>
+      <trans-unit id="0FJ_Sz1" resname="Logout">
+        <source>Logout</source>
+        <target>Выход</target>
+      </trans-unit>
+      <trans-unit id="Y7SLIj4" resname="Affiliates">
+        <source>Affiliates</source>
+        <target>Партнеры</target>
+      </trans-unit>
+      <trans-unit id="e3cp8V6" resname="Post a Job">
+        <source>Post a Job</source>
+        <target>Разместить вакансию</target>
+      </trans-unit>
+      <trans-unit id="SwvMlQO" resname="Jobeet - Your best job board">
+        <source>Jobeet - Your best job board</source>
+        <target>Jobeet - Your best job board</target>
+      </trans-unit>
+      <trans-unit id="DgeuhqV" resname="Expires in {days} days">
+        <source>Expires in {days} days</source>
+        <target>Дней до истечения: {days}</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{% block title %}Jobeet - Your best job board{% endblock %}</title>
+    <title>{% block title %}{{ 'Jobeet - Your best job board'|trans }}{% endblock %}</title>
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
@@ -11,34 +11,46 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="{{ path('home') }}">Jobeet</a>
+            <a class="navbar-brand" href="{{ path('home') }}">{{ 'Jobeet'|trans }}</a>
         </div>
 
         <div>
             <ul class="nav navbar-nav navbar-right">
                 {% if not app.user %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_login') }}">Login</a>
+                        <a href="{{ path('app_login') }}">{{ 'Login'|trans }}</a>
                     </li>
                 {% else %}
                     {% if is_granted('ROLE_ADMIN') %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('admin') }}">Admin</a>
+                            <a href="{{ path('admin') }}">{{ 'Admin Panel'|trans }}</a>
                         </li>
                     {% endif %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_logout') }}">Logout</a>
+                        <a class="nav-link" href="{{ path('app_logout') }}">{{ 'Logout'|trans }}</a>
                     </li>
                 {% endif %}
                 <li style="margin-right: 10px">
                     <div>
-                        <a href="{{ path('affiliate.create') }}" class="btn btn-default navbar-btn">Affiliates</a>
+                        <a href="{{ path('affiliate.create') }}" class="btn btn-default navbar-btn">{{ 'Affiliates'|trans }}</a>
                     </div>
                 </li>
                 <li>
                     <div>
-                        <a href="{{ path('job.create') }}" class="btn btn-default navbar-btn">Post a Job</a>
+                        <a href="{{ path('job.create') }}" class="btn btn-default navbar-btn">{{ 'Post a Job'|trans }}</a>
                     </div>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ app.request.locale|upper }}<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        {% for locale in locales %}
+                            <li>
+                                <a href="{{ path(app.request.get('_route'), app.request.attributes.get('_route_params')|merge({'_locale': locale})) }}">
+                                    {{ locale|upper }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </li>
             </ul>
         </div>
@@ -48,5 +60,9 @@
 <div class="container">
     {% block body %}{% endblock %}
 </div>
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
 </body>
 </html>

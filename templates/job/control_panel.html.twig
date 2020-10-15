@@ -16,9 +16,9 @@
 
             {% if job.activated %}
                 {% if job.expiresAt < date() %}
-                    <p class="navbar-text ">Expired</p>
+                    <p class="navbar-text">{{ 'Expired'|trans }}</p>
                 {% else %}
-                    <p class="navbar-text ">Expires in <strong>{{ job.expiresAt.diff(date())|date('%a') }}</strong> days</p>
+                    <p class="navbar-text">{{ 'Expires in {days} days'|trans({'days': job.expiresAt.diff(date())|date('%a')}) }}</p>
                 {% endif %}
 
                 {% if job.expiresAt.diff(date())|date('%a') < 5 %}
@@ -44,7 +44,7 @@
             {% endif %}
 
             <p class="navbar-text navbar-right">
-                [Bookmark this <a href="{{ url('job.preview', {token: job.token}) }}">URL</a> to manage this job in the future]
+                {{ '[Bookmark this <a href="{url}">URL</a> to manage this job in the future]'|trans({'url': path('job.preview', {token: job.token})})|raw }}
             </p>
         </div>
     </div>
