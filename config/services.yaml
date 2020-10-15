@@ -40,7 +40,7 @@ services:
         arguments:
             $targetDirectory: '%jobs_directory%'
 
-    App\EventListener\JobUploadListener:
+    App\EventListener\CompanyUploadListener:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
             - { name: doctrine.event_listener, event: preUpdate }

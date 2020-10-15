@@ -4,14 +4,14 @@
 namespace App\EventListener;
 
 
-use App\Entity\Job;
+use App\Entity\Company;
 use App\Service\FileUploader;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class JobUploadListener
+class CompanyUploadListener
 {
     /**
      * @var FileUploader
@@ -42,7 +42,7 @@ class JobUploadListener
     private function uploadFile($entity): void
     {
         // upload only works for Job entities
-        if (!$entity instanceof Job) {
+        if (!$entity instanceof Company) {
             return;
         }
 
@@ -82,7 +82,7 @@ class JobUploadListener
      */
     private function stringToFile($entity): void
     {
-        if (!$entity instanceof Job) {
+        if (!$entity instanceof Company) {
             return;
         }
 
@@ -96,7 +96,7 @@ class JobUploadListener
      */
     private function fileToString($entity): void
     {
-        if (!$entity instanceof Job) {
+        if (!$entity instanceof Company) {
             return;
         }
 

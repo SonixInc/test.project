@@ -3,14 +3,10 @@
 
 namespace App\Entity;
 
-use App\Controller\Api\Job\JobController;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * Job entity
@@ -18,8 +14,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @ORM\Entity(repositoryClass="App\Repository\JobRepository")
  * @ORM\Table(name="jobs")
  * @ORM\HasLifecycleCallbacks()
- * @Vich\Uploadable()
- *  * @ApiResource(
+ *  @ApiResource(
  *     denormalizationContext={"groups"={"write"}},
  *     paginationEnabled=false
  * )
@@ -58,9 +53,10 @@ class Job
     private $type;
 
     /**
-     * @var string
+     * @var Company
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="jobs")
+     * @ORM\JoinColumn(name="company_id", referencedColumnName="id", nullable=false)
      *
      * @Groups("write")
      *
@@ -68,35 +64,6 @@ class Job
      * @Assert\Length(max="255")
      */
     private $company;
-
-    /**
-     * @var string|null|UploadedFile
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
-     *
-     * @Assert\Length(max="255")
-     *
-     */
-    private $logo;
-
-    /**
-     * @var File
-     * @Vich\UploadableField(mapping="jobs", fileNameProperty="logo")
-     *
-     * @Groups("write")
-     */
-    private $logoFile;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(type="string", length=255, nullable=true)
-     *
-     * @Groups("write")
-     *
-     * @Assert\Length(max="255")
-     */
-    private $url;
 
     /**
      * @var string
@@ -250,85 +217,21 @@ class Job
     }
 
     /**
-     * @return string
+     * @return Company
      */
-    public function getCompany(): ?string
+    public function getCompany(): ?Company
     {
         return $this->company;
     }
 
     /**
-     * @param string $company
+     * @param Company $company
      *
      * @return self
      */
-    public function setCompany(string $company): self
+    public function setCompany(Company $company): self
     {
         $this->company = $company;
-
-        return $this;
-    }
-
-    /**
-     * @return string|null|UploadedFile
-     */
-    public function getLogo()
-    {
-        return $this->logo;
-    }
-
-    /**
-     * @param string|null|UploadedFile $logo
-     *
-     * @return self
-     */
-    public function setLogo($logo): self
-    {
-        $this->logo = $logo;
-
-        return $this;
-    }
-
-    /**
-     * @return File
-     */
-    public function getLogoFile(): ?File
-    {
-        return $this->logoFile;
-    }
-
-    /**
-     * @param File|null $logo
-     *
-     * @return self
-     */
-    public function setLogoFile(File $logo = null): self
-    {
-        $this->logoFile = $logo;
-
-        if ($logo) {
-            $this->updatedAt = new \DateTime();
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getUrl(): ?string
-    {
-        return $this->url;
-    }
-
-    /**
-     * @param string|null $url
-     *
-     * @return self
-     */
-    public function setUrl(?string $url): self
-    {
-        $this->url = $url;
 
         return $this;
     }

@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 
 
 use App\Entity\Category;
+use App\Entity\Company;
 use App\Entity\Job;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -19,14 +20,22 @@ class JobFixtures extends Fixture implements DependentFixtureInterface
      */
     public function load(ObjectManager $manager) : void
     {
-        $jobSensioLabs = new Job();
         /** @var Category $categoryProgramming */
         $categoryProgramming = $manager->merge($this->getReference('category-programming'));
+
+        /**
+         * @var Company $company1
+         * @var Company $company2
+         */
+        $company1 = $this->getReference('sensio-labs');
+        $company2 = $this->getReference('extreme-sensio');
+
+
+
+        $jobSensioLabs = new Job();
         $jobSensioLabs->setCategory($categoryProgramming);
         $jobSensioLabs->setType('full-time');
-        $jobSensioLabs->setCompany('Sensio Labs');
-        $jobSensioLabs->setLogo('sensio-labs.gif');
-        $jobSensioLabs->setUrl('http://www.sensiolabs.com/');
+        $jobSensioLabs->setCompany($company1);
         $jobSensioLabs->setPosition('Web Developer');
         $jobSensioLabs->setLocation('Paris, France');
         $jobSensioLabs->setDescription('You\'ve already developed websites with symfony and you want to work with Open-Source technologies. You have a minimum of 3 years experience in web development with PHP or Java and you wish to participate to development of Web 2.0 sites using the best frameworks available.');
@@ -42,9 +51,7 @@ class JobFixtures extends Fixture implements DependentFixtureInterface
         $categoryDesign = $manager->merge($this->getReference('category-design'));
         $jobExtremeSensio->setCategory($categoryDesign);
         $jobExtremeSensio->setType('part-time');
-        $jobExtremeSensio->setCompany('Extreme Sensio');
-        $jobExtremeSensio->setLogo('extreme-sensio.gif');
-        $jobExtremeSensio->setUrl('http://www.extreme-sensio.com/');
+        $jobExtremeSensio->setCompany($company2);
         $jobExtremeSensio->setPosition('Web Designer');
         $jobExtremeSensio->setLocation('Paris, France');
         $jobExtremeSensio->setDescription('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in.');
@@ -56,13 +63,9 @@ class JobFixtures extends Fixture implements DependentFixtureInterface
         $jobExtremeSensio->setExpiresAt(new \DateTime('+30 days'));
 
         $jobExpired = new Job();
-        /** @var Category $categoryProgramming */
-        $categoryProgramming = $manager->merge($this->getReference('category-programming'));
         $jobExpired->setCategory($categoryProgramming);
         $jobExpired->setType('full-time');
-        $jobExpired->setCompany('Sensio Labs');
-        $jobExpired->setLogo('sensio-labs.gif');
-        $jobExpired->setUrl('http://www.sensiolabs.com/');
+        $jobExpired->setCompany($company2);
         $jobExpired->setPosition('Web Developer Expired');
         $jobExpired->setLocation('Paris, France');
         $jobExpired->setDescription('Lorem ipsum dolor sit amet, consectetur adipisicing elit.');
@@ -75,11 +78,9 @@ class JobFixtures extends Fixture implements DependentFixtureInterface
 
         for ($i = 100; $i <= 130; $i++) {
             $job = new Job();
-            /** @var Category $categoryProgramming */
-            $categoryProgramming = $manager->merge($this->getReference('category-programming'));
             $job->setCategory($categoryProgramming);
             $job->setType('full-time');
-            $job->setCompany('Company ' . $i);
+            $job->setCompany($company1);
             $job->setPosition('Web Developer');
             $job->setLocation('Paris, France');
             $job->setDescription('Lorem ipsum dolor sit amet, consectetur adipisicing elit.');
@@ -105,6 +106,7 @@ class JobFixtures extends Fixture implements DependentFixtureInterface
     public function getDependencies(): array
     {
         return [
+            CompanyFixtures::class,
             CategoryFixtures::class,
         ];
     }

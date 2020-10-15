@@ -13,7 +13,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -51,26 +50,16 @@ class JobController extends AbstractController
      *
      * @param Request                $request      Http request
      * @param EntityManagerInterface $em           Entity manager
-     * @param FileUploader           $fileUploader File uploader
      *
      * @return RedirectResponse|Response
      */
-    public function create(Request $request, EntityManagerInterface $em, FileUploader $fileUploader): Response
+    public function create(Request $request, EntityManagerInterface $em): Response
     {
         $job = new Job();
         $form = $this->createForm(JobType::class, $job);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var UploadedFile|null $logoFile */
-            $logoFile = $form->get('logo')->getData();
-
-            if ($logoFile instanceof UploadedFile) {
-                $fileName = $fileUploader->upload($logoFile);
-
-                $job->setLogo($fileName);
-            }
-
             $em->persist($job);
             $em->flush();
 
