@@ -19,6 +19,10 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @ORM\Table(name="jobs")
  * @ORM\HasLifecycleCallbacks()
  * @Vich\Uploadable()
+ *  * @ApiResource(
+ *     denormalizationContext={"groups"={"write"}},
+ *     paginationEnabled=false
+ * )
  */
 class Job
 {
