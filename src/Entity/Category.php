@@ -44,6 +44,13 @@ class Category
     private $jobs;
 
     /**
+     * @var ArrayCollection|Summary[]
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Summary", mappedBy="category", cascade={"remove"})
+     */
+    private $summaries;
+
+    /**
      * @var Affiliate[]|ArrayCollection
      *
      * @ORM\ManyToMany(targetEntity="Affiliate", mappedBy="categories")
@@ -133,6 +140,40 @@ class Category
     public function removeJob(Job $job): self
     {
         $this->jobs->removeElement($job);
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSummaries(): array
+    {
+        return $this->summaries->toArray();
+    }
+
+    /**
+     * @param Summary $summary
+     *
+     * @return self
+     */
+    public function addSummary(Summary $summary): self
+    {
+        if (!$this->summaries->contains($summary)) {
+            $this->summaries->add($summary);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Summary $summary
+     *
+     * @return self
+     */
+    public function removeSummary(Summary $summary): self
+    {
+        $this->summaries->removeElement($summary);
 
         return $this;
     }
