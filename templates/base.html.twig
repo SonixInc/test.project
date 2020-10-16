@@ -18,6 +18,9 @@
         <div>
             <ul class="nav navbar-nav navbar-right">
                 <li class="nav-item">
+                    <a href="{{ path('summary') }}">{{ 'Summaries'|trans }}</a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ path('company') }}">{{ 'Companies'|trans }}</a>
                 </li>
                 {% if not app.user %}

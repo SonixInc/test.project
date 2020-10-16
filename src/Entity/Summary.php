@@ -36,31 +36,30 @@ class Summary
      * @var string
      * @ORM\Column(type="string", length=255)
      */
+    private $firstName;
 
-    private $fistName;
     /**
      * @var string
      * @ORM\Column(type="string", length=255)
      */
-
     private $lastName;
+
     /**
      * @var string
      * @ORM\Column(type="string", length=255)
      */
-
     private $phone;
+
     /**
      * @var string
      * @ORM\Column(type="string", length=255)
      */
-
     private $city;
+
     /**
      * @var string
      * @ORM\Column(type="string", length=32)
      */
-
     private $sex;
 
     /**
@@ -85,9 +84,9 @@ class Summary
     /**
      * @return string
      */
-    public function getFistName(): ?string
+    public function getFirstName(): ?string
     {
-        return $this->fistName;
+        return $this->firstName;
     }
 
     /**
@@ -95,9 +94,9 @@ class Summary
      *
      * @return $this
      */
-    public function setFistName(string $fistName): self
+    public function setFirstName(string $fistName): self
     {
-        $this->fistName = $fistName;
+        $this->firstName = $fistName;
 
         return $this;
     }
