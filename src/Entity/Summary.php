@@ -15,6 +15,14 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Summary
 {
+    public const EDUCATION_SECONDARY = 'secondary';
+    public const EDUCATION_HIGHER = 'higher';
+
+    public const EDUCATIONS = [
+        self::EDUCATION_SECONDARY,
+        self::EDUCATION_HIGHER,
+    ];
+
     /**
      * @var int
      *

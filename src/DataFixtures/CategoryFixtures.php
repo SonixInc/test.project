@@ -14,7 +14,7 @@ class CategoryFixtures extends Fixture
      * @param ObjectManager $manager
      * @return void
      */
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $designCategory = new Category();
         $designCategory->setName('Design');
