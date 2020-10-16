@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\FeedbackRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=FeedbackRepository::class)
@@ -65,7 +66,7 @@ class Feedback
     }
 
     /**
-     * @param User $user
+     * @param User|UserInterface $user
      *
      * @return self
      */

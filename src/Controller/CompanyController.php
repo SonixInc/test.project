@@ -5,8 +5,10 @@ namespace App\Controller;
 
 
 use App\Entity\Company;
+use App\Entity\Feedback;
 use App\Entity\Job;
 use App\Form\CompanyType;
+use App\Form\FeedbackType;
 use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -83,17 +85,32 @@ class CompanyController extends AbstractController
      * @Route(
      *     "/company/{id}",
      *     name="company.show",
-     *     methods={"GET"},
+     *     methods={"GET|POST"},
      *     requirements={"id" = "\d+"})
      *
-     * @param Request            $request   Http request
-     * @param Company            $company   Company entity
-     * @param PaginatorInterface $paginator Knp paginator
+     * @param Request                $request   Http request
+     * @param Company                $company   Company entity
+     * @param PaginatorInterface     $paginator Knp paginator
+     * @param EntityManagerInterface $em        Entity manager
      *
      * @return Response
      */
-    public function show(Request $request, Company $company, PaginatorInterface $paginator): Response
+    public function show(Request $request, Company $company, PaginatorInterface $paginator, EntityManagerInterface $em): Response
     {
+        $feedback = new Feedback();
+
+        $form = $this->createForm(FeedbackType::class, $feedback);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $feedback->setUser($this->getUser());
+            $feedback->setCompany($company);
+            $em->persist($feedback);
+            $em->flush();
+            return $this->redirectToRoute('company.show', ['id' => $company->getId()]);
+        }
+
+
         $activeJobs = $paginator->paginate(
             $this->getDoctrine()->getRepository(Job::class)->getPaginatedActiveJobsByCompanyQuery($company),
             $request->query->getInt('page', 1),
@@ -101,8 +118,10 @@ class CompanyController extends AbstractController
         );
 
         return $this->render('company/show.html.twig', [
+            'form' => $form->createView(),
             'company'    => $company,
             'activeJobs' => $activeJobs,
         ]);
     }
+
 }
