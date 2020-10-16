@@ -1,3 +1,5 @@
+require('./styles/app.scss');
+
 // require jQuery normally
 const $ = require('jquery');
 

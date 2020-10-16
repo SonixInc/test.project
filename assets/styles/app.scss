@@ -1,1 +1,14 @@
 
+
+
+.company-feedback {
+  margin-top: 50px;
+
+  .company-feedback-item {
+    margin-bottom: 50px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

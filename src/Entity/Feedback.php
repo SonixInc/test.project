@@ -21,7 +21,7 @@ class Feedback
     /**
      * @var User
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="comments")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="feedbacks")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;

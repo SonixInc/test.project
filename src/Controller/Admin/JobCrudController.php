@@ -45,18 +45,18 @@ class JobCrudController extends AbstractCrudController
      */
     public function configureFields(string $pageName): iterable
     {
-        $logoFile = Field\ImageField::new('logo', 'Logo')
-            ->setBasePath($this->getParameter('jobs_web_directory'))
-            ->setLabel('Logo');
+//        $logoFile = Field\ImageField::new('logo', 'Logo')
+//            ->setBasePath($this->getParameter('jobs_web_directory'))
+//            ->setLabel('Logo');
+//
+//        $logo = Field\ImageField::new('logoFile', 'Logo File')
+//            ->setFormType(VichImageType::class)
+//            ->setFormTypeOptions([
+//                'allow_delete' => false,
+//                'delete_label' => 'Delete image ?'
+//            ]);
 
-        $logo = Field\ImageField::new('logoFile', 'Logo File')
-            ->setFormType(VichImageType::class)
-            ->setFormTypeOptions([
-                'allow_delete' => false,
-                'delete_label' => 'Delete image ?'
-            ]);
-
-        $fields = [
+        return [
             Field\IdField::new('id')->onlyOnIndex(),
             Field\ChoiceField::new('type')->setChoices(array_combine(Job::TYPES, Job::TYPES))->hideOnIndex(),
             Field\TextField::new('company'),
@@ -66,19 +66,10 @@ class JobCrudController extends AbstractCrudController
             Field\TextField::new('howToApply', 'How to apply?')->hideOnIndex(),
             Field\BooleanField::new('public', 'Public?')->hideOnIndex(),
             Field\TextField::new('email'),
-            Field\UrlField::new('url'),
             Field\BooleanField::new('activated'),
             Field\AssociationField::new('category'),
             Field\DateTimeField::new('createdAt')->hideOnForm()
         ];
-
-        if ($pageName === Crud::PAGE_INDEX || $pageName === Crud::PAGE_DETAIL) {
-            $fields[] = $logoFile;
-        } else {
-            $fields[] = $logo;
-        }
-
-        return $fields;
     }
 
     /**

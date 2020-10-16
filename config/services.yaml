@@ -8,8 +8,8 @@ parameters:
     locales: ['en', 'ru']
     max_jobs_on_homepage: 10
     max_jobs_on_category: 20
-    jobs_directory: '%kernel.project_dir%/public/uploads/jobs'
-    jobs_web_directory: '/uploads/jobs'
+    companies_directory: '%kernel.project_dir%/public/uploads/companies'
+    companies_web_directory: '/uploads/companies'
     max_per_page: 10
 
 services:
@@ -38,7 +38,7 @@ services:
     # please note that last definitions always *replace* previous ones
     App\Service\FileUploader:
         arguments:
-            $targetDirectory: '%jobs_directory%'
+            $targetDirectory: '%companies_directory%'
 
     App\EventListener\CompanyUploadListener:
         tags:

@@ -6,6 +6,7 @@ namespace App\Repository;
 
 use App\Entity\Affiliate;
 use App\Entity\Category;
+use App\Entity\Company;
 use App\Entity\Job;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityRepository;
@@ -66,6 +67,18 @@ class JobRepository extends EntityRepository
             ->andWhere('j.expiresAt > :date')
             ->andWhere('j.activated = :activated')
             ->setParameter('category', $category)
+            ->setParameter('date', new \DateTime())
+            ->setParameter('activated', true)
+            ->getQuery();
+    }
+
+    public function getPaginatedActiveJobsByCompanyQuery(Company $company): AbstractQuery
+    {
+        return $this->createQueryBuilder('j')
+            ->where('j.company = :company')
+            ->andWhere('j.expiresAt > :date')
+            ->andWhere('j.activated = :activated')
+            ->setParameter(':company', $company)
             ->setParameter('date', new \DateTime())
             ->setParameter('activated', true)
             ->getQuery();

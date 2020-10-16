@@ -5,7 +5,9 @@ namespace App\Form;
 
 
 use App\Entity\Category;
+use App\Entity\Company;
 use App\Entity\Job;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -25,10 +27,22 @@ use Symfony\Component\Validator\Constraints\NotNull;
 class JobType extends AbstractType
 {
     /**
+     * @var EntityManagerInterface
+     */
+    private $em;
+
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $activeCompanies = $this->em->getRepository(Company::class)->getActiveCompanies();
+
         $builder
             ->add('type', ChoiceType::class, [
                 'choices' => array_combine(Job::TYPES, Job::TYPES),
@@ -37,22 +51,12 @@ class JobType extends AbstractType
                     new NotBlank(),
                 ]
             ])
-            ->add('company', TextType::class, [
+            ->add('company', EntityType::class, [
+                'class' => Company::class,
+                'choice_label' => 'name',
+                'choices' => $activeCompanies,
                 'constraints' => [
                     new NotBlank(),
-                    new Length(['max' => 255]),
-                ]
-            ])
-            ->add('logo', FileType::class, [
-                'required' => false,
-                'constraints' => [
-                    new Image()
-                ]
-            ])
-            ->add('url', UrlType::class, [
-                'required' => false,
-                'constraints' => [
-                    new Length(['max' => 255]),
                 ]
             ])
             ->add('position', TextType::class, [

@@ -218,6 +218,38 @@ class Company
     }
 
     /**
+     * @return Feedback[]|ArrayCollection
+     */
+    public function getFeedbacks(): array
+    {
+        return $this->feedbacks->toArray();
+    }
+
+    /**
+     * @param Feedback $feedback
+     *
+     * @return $this
+     */
+    public function addFeedbacks(Feedback $feedback): self
+    {
+        $this->feedbacks->add($feedback);
+
+        return $this;
+    }
+
+    /**
+     * @param Feedback $feedback
+     *
+     * @return $this
+     */
+    public function removeFeedback(Feedback $feedback): self
+    {
+        $this->feedbacks->removeElement($feedback);
+
+        return $this;
+    }
+
+    /**
      * @return bool
      */
     public function isActive(): ?bool
@@ -250,6 +282,7 @@ class Company
      */
     public function prePersist(): void
     {
+        $this->active = false;
         $this->updatedAt = new \DateTime();
     }
 

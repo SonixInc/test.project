@@ -3,5 +3,5 @@ vich_uploader:
 
     mappings:
         jobs:
-            uri_prefix: '%jobs_web_directory%'
-            upload_destination: '%jobs_directory%'
+            uri_prefix: '%companies_web_directory%'
+            upload_destination: '%companies_directory%'

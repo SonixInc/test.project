@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="media" style="margin-top: 60px;">
+    {% if company.logo %}
+        <div class="media-left">
+            <a href="{{ company.url }}" target="_blank">
+                <img class="media-object" style="width:100px; height:100px;" src="{{ asset(companies_web_directory ~ '/' ~ company.logo) }}">
+            </a>
+        </div>
+    {% endif %}
+
+    <div class="media-body">
+        <div class="row">
+            <div class="col-sm-10">
+                <h3 class="media-heading"><strong>{{ company.name }}</strong></h3>
+            </div>
+        </div>
+
+        <div>
+            <h4>Jobs</h4>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Position</th>
+                        <th>Location</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for job in activeJobs %}
+                        <tr>
+                            <td><a href="{{ path('job.show', {id: job.id}) }}">{{ job.position }}</a></td>
+                            <td>{{ job.location }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="navigation text-center">
+                {{ knp_pagination_render(activeJobs) }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12 text-right">
+                <a class="btn btn-default" href="{{ path('job.list') }}">
+                    <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
+                    Back to list
+                </a>
+            </div>
+        </div>
+
+        <div class="company-feedback">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h3>Feedback</h3></div>
+                <div class="panel-body">
+                    {% for feedback in company.feedbacks %}
+                        <div class="company-feedback-item">
+                            <h4>{{ feedback.user.username }}</h4>
+                            <p>{{ feedback.content }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+{% endblock %}
+
