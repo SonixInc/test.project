@@ -73,8 +73,9 @@
     {% block body %}{% endblock %}
 </div>
 
+{{ encore_entry_script_tags('app') }}
 {% block javascripts %}
-    {{ encore_entry_script_tags('app') }}
+
 {% endblock %}
 </body>
 </html>

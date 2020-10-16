@@ -13,31 +13,28 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Class SummaryController
+ *
+ * @package App\Controller
+ */
 class SummaryController extends AbstractController
 {
     /**
-     * @Route("summary", name="summary", methods={"GET"})
+     * List of summaries
      *
-     * @param Request            $request   Http request
-     * @param PaginatorInterface $paginator Knp paginator
+     * @Route("summary", name="summary", methods={"GET"})
      *
      * @return Response
      */
-    public function index(Request $request, PaginatorInterface $paginator): Response
+    public function index(): Response
     {
-        /** @var Summary[] $summaries */
-        $summaries = $paginator->paginate(
-            $this->getDoctrine()->getRepository(Summary::class)->findAll(),
-            $request->query->getInt('page', 1),
-            1
-        );
-
-        return $this->render('summary/index.html.twig', [
-            'summaries' => $summaries
-        ]);
+        return $this->render('summary/index.html.twig');
     }
 
     /**
+     * Create summary entity
+     *
      * @Route("summary/create", name="summary.create", methods={"GET|POST"})
      *
      * @param Request                $request Http request
@@ -64,6 +61,8 @@ class SummaryController extends AbstractController
     }
 
     /**
+     * Show summary entity
+     *
      * @Route("summary/{id}", name="summary.show", methods={"GET"}, requirements={"id" = "\d+"})
      * @param Summary $summary Summary entity
      *
