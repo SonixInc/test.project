@@ -3,6 +3,7 @@
 
 namespace App\Entity;
 
+use App\Controller\Api\Company\LogoUploadController;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -24,7 +25,30 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *     denormalizationContext={"groups"={"write"}},
  *     normalizationContext={"groups"={"read"}},
  *     attributes={"fetchEager": true},
- *     paginationEnabled=false
+ *     paginationEnabled=false,
+ *     collectionOperations={
+ *          "get",
+ *          "post"={
+ *             "controller"=LogoUploadController::class,
+ *             "deserialize"=false,
+ *             "openapiContext"={
+ *                  "requestBody"={
+ *                      "content"={
+ *                          "multipart/form-data"={
+ *                              "schema"={
+ *                                  "type"="object",
+ *                                  "properties"={
+ *                                      "logoFile"={
+ *                                          "type"="string"
+ *                                      }
+ *                                  }
+ *                              }
+ *                          }
+ *                      }
+ *                  }
+ *              }
+ *          }
+ *     }
  * )
  */
 class Company
