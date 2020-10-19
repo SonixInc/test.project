@@ -36,7 +36,7 @@ class User implements UserInterface
 
     /**
      * @var string The hashed password
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     private $password;
 
@@ -47,11 +47,25 @@ class User implements UserInterface
      */
     private $feedbacks;
 
+    /**
+     * @var ArrayCollection|Network[]
+     *
+     * @ORM\OneToMany(targetEntity="Network", mappedBy="user", orphanRemoval=true, cascade={"persist"})
+     */
+    private $networks;
+
+    /**
+     * User constructor.
+     */
     public function __construct()
     {
         $this->feedbacks = new ArrayCollection();
+        $this->networks = new ArrayCollection();
     }
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
@@ -157,5 +171,44 @@ class User implements UserInterface
         $this->feedbacks->removeElement($feedback);
 
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getNetworks(): array
+    {
+        return $this->networks->toArray();
+    }
+
+    /**
+     * @param Network $network
+     *
+     * @return $this
+     */
+    public function addNetwork(Network $network): self
+    {
+        if (!$this->networks->contains($network)) {
+            $this->networks->add($network);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Network $network
+     *
+     * @return $this
+     */
+    public function removeNetwork(Network $network): self
+    {
+        $this->networks->removeElement($network);
+
+        return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->username;
     }
 }

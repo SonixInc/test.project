@@ -31,14 +31,21 @@
                         <a href="{{ path('app_register') }}">{{ 'Register'|trans }}</a>
                     </li>
                 {% else %}
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <li class="nav-item">
-                            <a href="{{ path('admin') }}">{{ 'Admin Panel'|trans }}</a>
-                        </li>
-                    {% endif %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('app_logout') }}">{{ 'Logout'|trans }}</a>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ app.user }}</a>
+                        <ul class="dropdown-menu">
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <li class="nav-item">
+                                    <a href="{{ path('admin') }}">{{ 'Admin Panel'|trans }}</a>
+                                </li>
+                            {% endif %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('app_logout') }}">{{ 'Logout'|trans }}</a>
+                            </li>
+                        </ul>
                     </li>
+
+
                 {% endif %}
                 <li style="margin-right: 10px">
                     <div>
