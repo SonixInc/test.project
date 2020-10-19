@@ -18,6 +18,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @ORM\Entity(repositoryClass="App\Repository\CompanyRepository")
  * @ORM\Table(name="company")
  * @ORM\HasLifecycleCallbacks()
+ * @Vich\Uploadable()
  */
 class Company
 {
@@ -142,7 +143,7 @@ class Company
     /**
      * @return File
      */
-    public function getLogoFile(): File
+    public function getLogoFile(): ?File
     {
         return $this->logoFile;
     }

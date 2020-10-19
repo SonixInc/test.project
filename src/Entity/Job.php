@@ -472,4 +472,9 @@ class Job
     {
         $this->updatedAt = new \DateTime();
     }
+
+    public function __toString(): string
+    {
+        return 'ID: ' . $this->id . ' Position: ' . $this->position;
+    }
 }

@@ -45,21 +45,10 @@ class JobCrudController extends AbstractCrudController
      */
     public function configureFields(string $pageName): iterable
     {
-//        $logoFile = Field\ImageField::new('logo', 'Logo')
-//            ->setBasePath($this->getParameter('jobs_web_directory'))
-//            ->setLabel('Logo');
-//
-//        $logo = Field\ImageField::new('logoFile', 'Logo File')
-//            ->setFormType(VichImageType::class)
-//            ->setFormTypeOptions([
-//                'allow_delete' => false,
-//                'delete_label' => 'Delete image ?'
-//            ]);
-
         return [
             Field\IdField::new('id')->onlyOnIndex(),
             Field\ChoiceField::new('type')->setChoices(array_combine(Job::TYPES, Job::TYPES))->hideOnIndex(),
-            Field\TextField::new('company'),
+            Field\AssociationField::new('company'),
             Field\TextField::new('position'),
             Field\TextField::new('location'),
             Field\TextEditorField::new('description')->hideOnIndex(),
