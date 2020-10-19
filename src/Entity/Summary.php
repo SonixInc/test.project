@@ -3,7 +3,9 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Class Summary
@@ -12,6 +14,12 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity(repositoryClass="App\Repository\SummaryRepository")
  * @ORM\Table(name="summaries")
+ * @ApiResource(
+ *     denormalizationContext={"groups"={"write"}},
+ *     normalizationContext={"groups"={"read"}},
+ *     attributes={"fetchEager": true},
+ *     paginationEnabled=false
+ * )
  */
 class Summary
 {
@@ -35,30 +43,35 @@ class Summary
     /**
      * @var string
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read", "write"})
      */
     private $firstName;
 
     /**
      * @var string
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read", "write"})
      */
     private $lastName;
 
     /**
      * @var string
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read", "write"})
      */
     private $phone;
 
     /**
      * @var string
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read", "write"})
      */
     private $city;
 
     /**
      * @var string
      * @ORM\Column(type="string", length=32)
+     * @Groups({"read", "write"})
      */
     private $sex;
 
@@ -66,6 +79,7 @@ class Summary
      * @var Category
      * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="summaries")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     * @Groups({"read", "write"})
      */
     private $category;
 
@@ -73,6 +87,7 @@ class Summary
      * @var string
      *
      * @ORM\Column(type="string", length=32)
+     * @Groups({"read", "write"})
      */
     private $education;
 

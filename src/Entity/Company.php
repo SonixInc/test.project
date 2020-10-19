@@ -3,11 +3,12 @@
 
 namespace App\Entity;
 
-
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
@@ -19,6 +20,12 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @ORM\Table(name="company")
  * @ORM\HasLifecycleCallbacks()
  * @Vich\Uploadable()
+ * @ApiResource(
+ *     denormalizationContext={"groups"={"write"}},
+ *     normalizationContext={"groups"={"read"}},
+ *     attributes={"fetchEager": true},
+ *     paginationEnabled=false
+ * )
  */
 class Company
 {
@@ -35,12 +42,16 @@ class Company
      * @var string
      *
      * @ORM\Column(type="string")
+     *
+     * @Groups({"read", "write"})
      */
     private $name;
     /**
      * @var string|null|UploadedFile
      *
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @Groups("read")
      */
     private $logo;
 
@@ -48,6 +59,8 @@ class Company
      * @var File
      *
      * @Vich\UploadableField(mapping="jobs", fileNameProperty="logo")
+     *
+     * @Groups("write")
      */
     private $logoFile;
 
@@ -55,6 +68,8 @@ class Company
      * @var string|null
      *
      * @ORM\Column(type="string", length=255, nullable=true)
+     *
+     * @Groups({"read", "write"})
      */
     private $url;
 
@@ -62,6 +77,8 @@ class Company
      * @var ArrayCollection|Job[]
      *
      * @ORM\OneToMany(targetEntity="App\Entity\Job", mappedBy="company", cascade={"remove"})
+     *
+     * @Groups("read")
      */
     private $jobs;
 
@@ -69,6 +86,8 @@ class Company
      * @var boolean
      *
      * @ORM\Column(type="boolean")
+     *
+     * @Groups("read")
      */
     private $active;
 
@@ -76,6 +95,8 @@ class Company
      * @var ArrayCollection|Feedback[]
      *
      * @ORM\OneToMany(targetEntity="App\Entity\Feedback", mappedBy="company")
+     *
+     * @Groups("read")
      */
     private $feedbacks;
 
