@@ -9,6 +9,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field;
 
+/**
+ * Class AffiliateCrudController
+ *
+ * @package App\Controller\Admin
+ */
 class AffiliateCrudController extends AbstractCrudController
 {
     /**

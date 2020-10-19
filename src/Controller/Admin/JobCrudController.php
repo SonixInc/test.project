@@ -10,6 +10,11 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
+/**
+ * Class JobCrudController
+ *
+ * @package App\Controller\Admin
+ */
 class JobCrudController extends AbstractCrudController
 {
     /**
