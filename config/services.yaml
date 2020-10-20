@@ -49,6 +49,10 @@ services:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
 
+    App\EventListener\SummaryUserListener:
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
     App\EventListener\JobTokenListener:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
