@@ -131,6 +131,14 @@ class Company
      */
     private $updatedAt;
 
+    /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="companies")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+     */
+    private $user;
+
     public function __construct()
     {
         $this->jobs = new ArrayCollection();
@@ -321,6 +329,26 @@ class Company
     public function getUpdatedAt(): ?\DateTime
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return $this
+     */
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
     }
 
     /**

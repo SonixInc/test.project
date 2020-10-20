@@ -7,11 +7,13 @@ namespace App\Controller;
 use App\Entity\Company;
 use App\Entity\Feedback;
 use App\Entity\Job;
+use App\Entity\User;
 use App\Form\CompanyType;
 use App\Form\FeedbackType;
 use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,6 +47,7 @@ class CompanyController extends AbstractController
      * Create a new company
      *
      * @Route("company/create", name="company.create", methods={"GET|POST"})
+     * @IsGranted("ROLE_USER")
      *
      * @param Request                $request      Http request
      * @param EntityManagerInterface $em           Entity Manager

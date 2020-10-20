@@ -45,23 +45,26 @@
                         </ul>
                     </li>
 
+                    <li style="margin-right: 10px">
+                        <div>
+                            <a href="{{ path('company.create') }}" class="btn btn-default navbar-btn">{{ 'Register company'|trans }}</a>
+                        </div>
+                    </li>
+                    <li style="margin-right: 10px">
+                        <div>
+                            <a href="{{ path('affiliate.create') }}" class="btn btn-default navbar-btn">{{ 'Affiliates'|trans }}</a>
+                        </div>
+                    </li>
+
+                    {% if is_granted('ROLE_COMPANY') %}
+                        <li>
+                            <div>
+                                <a href="{{ path('job.create') }}" class="btn btn-default navbar-btn">{{ 'Post a Job'|trans }}</a>
+                            </div>
+                        </li>
+                    {% endif %}
 
                 {% endif %}
-                <li style="margin-right: 10px">
-                    <div>
-                        <a href="{{ path('company.create') }}" class="btn btn-default navbar-btn">{{ 'Register company'|trans }}</a>
-                    </div>
-                </li>
-                <li style="margin-right: 10px">
-                    <div>
-                        <a href="{{ path('affiliate.create') }}" class="btn btn-default navbar-btn">{{ 'Affiliates'|trans }}</a>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <a href="{{ path('job.create') }}" class="btn btn-default navbar-btn">{{ 'Post a Job'|trans }}</a>
-                    </div>
-                </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ app.request.locale|upper }}<span class="caret"></span></a>
                     <ul class="dropdown-menu">

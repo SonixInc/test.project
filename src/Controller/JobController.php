@@ -51,9 +51,10 @@ class JobController extends AbstractController
      * Creates a new job entity.
      *
      * @Route("/create", name="job.create", methods={"GET", "POST"})
+     * @IsGranted("ROLE_COMPANY")
      *
-     * @param Request                $request      Http request
-     * @param EntityManagerInterface $em           Entity manager
+     * @param Request                $request Http request
+     * @param EntityManagerInterface $em      Entity manager
      *
      * @return RedirectResponse|Response
      */
@@ -82,6 +83,7 @@ class JobController extends AbstractController
      * Edit existing job entity
      *
      * @Route("/{token}/edit", name="job.edit", methods={"GET", "POST"}, requirements={"token" = "\w+"})
+     * @IsGranted("ROLE_COMPANY")
      *
      * @param Request                $request Http request
      * @param Job                    $job     Job entity
@@ -112,6 +114,7 @@ class JobController extends AbstractController
      * Delete a job entity.
      *
      * @Route("/{token}/delete", name="job.delete", methods="DELETE", requirements={"token" = "\w+"})
+     * @IsGranted("ROLE_COMPANY")
      *
      * @param Request                $request Http request
      * @param Job                    $job     Job entity
@@ -136,6 +139,7 @@ class JobController extends AbstractController
      * Publish a job entity.
      *
      * @Route("/{token}/publish", name="job.publish", methods="POST", requirements={"token" = "\w+"})
+     * @IsGranted("ROLE_COMPANY")
      *
      * @param Request                $request Http request
      * @param Job                    $job     Job entity
@@ -187,9 +191,9 @@ class JobController extends AbstractController
      * @Entity("job", expr="repository.findActiveJob(id)")
      * @IsGranted("ROLE_WORKER")
      *
-     * @param Request                $request
-     * @param Job                    $job
-     * @param EntityManagerInterface $em
+     * @param Request                $request Http request
+     * @param Job                    $job     Job entity
+     * @param EntityManagerInterface $em      Entity manager
      *
      * @return Response
      */

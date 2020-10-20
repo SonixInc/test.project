@@ -3,9 +3,11 @@
 {% block body %}
     <h3>Summaries</h3>
 
-    <div class="row">
-        <a href="{{ path('summary.create') }}" class="btn btn-primary">Create</a>
-    </div>
+    {% if app.user %}
+        <div class="row">
+            <a href="{{ path('summary.create') }}" class="btn btn-primary">Create</a>
+        </div>
+    {% endif %}
 
     <div class="row" id="response">
 

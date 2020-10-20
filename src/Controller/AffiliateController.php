@@ -13,6 +13,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Class AffiliateController
+ *
+ * @package App\Controller
+ */
 class AffiliateController extends AbstractController
 {
     /**

@@ -68,6 +68,13 @@ class User implements UserInterface
     private $summaries;
 
     /**
+     * @var ArrayCollection|Company[]
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Company", mappedBy="user", orphanRemoval=true)
+     */
+    private $companies;
+
+    /**
      * User constructor.
      */
     public function __construct()
@@ -75,6 +82,7 @@ class User implements UserInterface
         $this->feedbacks = new ArrayCollection();
         $this->networks = new ArrayCollection();
         $this->summaries = new ArrayCollection();
+        $this->companies = new ArrayCollection();
     }
 
     /**
@@ -114,9 +122,16 @@ class User implements UserInterface
         return array_unique($roles);
     }
 
-    public function setRoles(array $roles): self
+    /**
+     * @param string $role
+     *
+     * @return $this
+     */
+    public function setRoles(string $role): self
     {
-        $this->roles = $roles;
+        if (!\in_array($role, $this->roles, true)) {
+            $this->roles[] = $role;
+        }
 
         return $this;
     }
@@ -238,7 +253,6 @@ class User implements UserInterface
     {
         if (!$this->summaries->contains($summary)) {
             $this->summaries->add($summary);
-            $this->roles[] = self::ROLE_WORKER;
         }
 
         return $this;
@@ -252,6 +266,35 @@ class User implements UserInterface
     public function removeSummary(Summary $summary): self
     {
         $this->summaries->removeElement($summary);
+
+        return $this;
+    }
+
+    /**
+     * @return Company[]|ArrayCollection
+     */
+    public function getCompanies(): ?array
+    {
+        return $this->companies->toArray();
+    }
+
+    /**
+     * @param Company $company
+     *
+     * @return $this
+     */
+    public function addCompany(Company $company): self
+    {
+        if (!$this->companies->contains($company)) {
+            $this->companies->add($company);
+        }
+
+        return $this;
+    }
+
+    public function removeCompany(Company $company): self
+    {
+        $this->companies->removeElement($company);
 
         return $this;
     }

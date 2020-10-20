@@ -5,9 +5,11 @@ namespace App\Controller;
 
 
 use App\Entity\Summary;
+use App\Entity\User;
 use App\Form\SummaryType;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,6 +38,7 @@ class SummaryController extends AbstractController
      * Create summary entity
      *
      * @Route("summary/create", name="summary.create", methods={"GET|POST"})
+     * @IsGranted("ROLE_USER")
      *
      * @param Request                $request Http request
      * @param EntityManagerInterface $em      Entity manager
@@ -44,11 +47,16 @@ class SummaryController extends AbstractController
      */
     public function create(Request $request, EntityManagerInterface $em): Response
     {
+        /** @var User $user */
+        $user = $this->getUser();
+
         $summary = new Summary();
         $form = $this->createForm(SummaryType::class, $summary);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $summary->setUser($user);
+
             $em->persist($summary);
             $em->flush();
 
