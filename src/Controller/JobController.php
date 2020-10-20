@@ -6,11 +6,15 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Entity\Job;
+use App\Entity\Summary;
+use App\Entity\User;
 use App\Form\JobType;
+use App\Form\RespondFormType;
 use App\Service\FileUploader;
 use App\Service\JobHistoryService;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -175,6 +179,38 @@ class JobController extends AbstractController
 
         return $this->render('job/show.html.twig', [
             'job' => $job,
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/respond", name="job.respond", methods={"GET|POST"}, requirements={"id" = "\d+"})
+     * @Entity("job", expr="repository.findActiveJob(id)")
+     * @IsGranted("ROLE_WORKER")
+     *
+     * @param Request                $request
+     * @param Job                    $job
+     * @param EntityManagerInterface $em
+     *
+     * @return Response
+     */
+    public function respond(Request $request, Job $job, EntityManagerInterface $em): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $form = $this->createForm(RespondFormType::class, $job, [
+            'user_summaries' => $em->getRepository(Summary::class)->findBy(['user' => $user->getId()])
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+
+            return $this->redirectToRoute('job.show', ['id' => $job->getId()]);
+        }
+
+        return $this->render('job/respond.html.twig', [
+            'form' => $form->createView()
         ]);
     }
 

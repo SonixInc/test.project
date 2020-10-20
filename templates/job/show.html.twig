@@ -42,6 +42,12 @@
 
             <p>{{ job.howToApply }}</p>
 
+            <div>
+                <a href="{{ path('job.respond', {'id': job.id}) }}" class="btn btn-success">Respond</a>
+            </div>
+
+
+
             <div class="row">
                 <div class="col-sm-12 text-right">
                     <a class="btn btn-default" href="{{ path('job.list') }}">

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -17,6 +18,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface
 {
+    public const ROLE_USER = 'ROLE_USER';
+    public const ROLE_ADMIN = 'ROLE_ADMIN';
+    public const ROLE_WORKER = 'ROLE_WORKER';
+    public const ROLE_COMPANY = 'ROLE_COMPANY';
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -55,12 +61,20 @@ class User implements UserInterface
     private $networks;
 
     /**
+     * @var ArrayCollection|Summary[]
+     *
+     * @ORM\OneToMany(targetEntity=Summary::class, mappedBy="user", orphanRemoval=true, cascade={"all"})
+     */
+    private $summaries;
+
+    /**
      * User constructor.
      */
     public function __construct()
     {
         $this->feedbacks = new ArrayCollection();
         $this->networks = new ArrayCollection();
+        $this->summaries = new ArrayCollection();
     }
 
     /**
@@ -95,7 +109,7 @@ class User implements UserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        $roles[] = self::ROLE_USER;
 
         return array_unique($roles);
     }
@@ -207,6 +221,44 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @return ArrayCollection|Summary[]
+     */
+    public function getSummaries(): array
+    {
+        return $this->summaries->toArray();
+    }
+
+    /**
+     * @param Summary $summary
+     *
+     * @return $this
+     */
+    public function addSummary(Summary $summary): self
+    {
+        if (!$this->summaries->contains($summary)) {
+            $this->summaries->add($summary);
+            $this->roles[] = self::ROLE_WORKER;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Summary $summary
+     *
+     * @return $this
+     */
+    public function removeSummary(Summary $summary): self
+    {
+        $this->summaries->removeElement($summary);
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
     public function __toString(): string
     {
         return $this->username;

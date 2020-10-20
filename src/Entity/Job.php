@@ -4,7 +4,9 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -14,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="App\Repository\JobRepository")
  * @ORM\Table(name="jobs")
  * @ORM\HasLifecycleCallbacks()
- *  @ApiResource(
+ * @ApiResource(
  *     denormalizationContext={"groups"={"write"}},
  *     paginationEnabled=false
  * )
@@ -187,6 +189,22 @@ class Job
      * @Assert\Type(type="App\Entity\Category")
      */
     private $category;
+
+    /**
+     * @var ArrayCollection|Summary[]
+     *
+     * @ORM\ManyToMany(targetEntity="App\Entity\Summary", inversedBy="jobs", cascade={"all"})
+     * @ORM\JoinTable(name="jobs_summaries")
+     */
+    private $summaries;
+
+    /**
+     * Job constructor.
+     */
+    public function __construct()
+    {
+        $this->summaries = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -453,6 +471,40 @@ class Job
     }
 
     /**
+     * @return Summary[]|ArrayCollection
+     */
+    public function getSummaries(): ?array
+    {
+        return $this->summaries->toArray();
+    }
+
+    /**
+     * @param Summary $summary
+     *
+     * @return self
+     */
+    public function addSummary(Summary $summary): self
+    {
+        if (!$this->summaries->contains($summary)) {
+            $this->summaries->add($summary);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Summary $summary
+     *
+     * @return $this
+     */
+    public function removeSummary(Summary $summary): self
+    {
+        $this->summaries->removeElement($summary);
+
+        return $this;
+    }
+
+    /**
      * @ORM\PrePersist()
      */
     public function prePersist(): void
@@ -473,6 +525,9 @@ class Job
         $this->updatedAt = new \DateTime();
     }
 
+    /**
+     * @return string
+     */
     public function __toString(): string
     {
         return 'ID: ' . $this->id . ' Position: ' . $this->position;

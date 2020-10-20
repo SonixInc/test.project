@@ -4,6 +4,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -90,6 +91,28 @@ class Summary
      * @Groups({"read", "write"})
      */
     private $education;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="summaries")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+     *
+     * @Groups({"read", "write"})
+     */
+    private $user;
+
+    /**
+     * @var ArrayCollection|Job[]
+     *
+     * @ORM\ManyToMany(targetEntity="App\Entity\Job", mappedBy="summaries")
+     *
+     * @Groups("read")
+     */
+    private $jobs;
+
+    public function __construct()
+    {
+        $this->jobs = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -237,6 +260,60 @@ class Summary
     public function setEducation(string $education): self
     {
         $this->education = $education;
+
+        return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return $this
+     */
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Job[]|ArrayCollection
+     */
+    public function getJobs(): ?array
+    {
+        return $this->jobs->toArray();
+    }
+
+    /**
+     * @param Job $job
+     *
+     * @return self
+     */
+    public function addJob(Job $job): self
+    {
+        if (!$this->jobs->contains($job)) {
+            $this->jobs->add($job);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Job $job
+     *
+     * @return self
+     */
+    public function removeJob(Job $job): self
+    {
+        $this->jobs->removeElement($job);
 
         return $this;
     }

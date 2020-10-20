@@ -86,10 +86,7 @@ class FacebookAuthenticator extends SocialAuthenticator
         $user->setUsername($username);
 
         $network = new Network($user, $id, $networkName);
-        $network->setNetwork($networkName);
-        $network->setIdentity($id);
 
-        $network->setUser($user);
         $user->addNetwork($network);
 
         $this->em->persist($user);
