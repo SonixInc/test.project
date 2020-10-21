@@ -52,6 +52,18 @@ class Job
      * @Assert\NotBlank()
      * @Assert\Length(max="255")
      */
+    private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255)
+     *
+     * @Groups("write")
+     *
+     * @Assert\NotBlank()
+     * @Assert\Length(max="255")
+     */
     private $type;
 
     /**
@@ -191,19 +203,18 @@ class Job
     private $category;
 
     /**
-     * @var ArrayCollection|Summary[]
+     * @var Application
      *
-     * @ORM\ManyToMany(targetEntity="App\Entity\Summary", inversedBy="jobs", cascade={"all"})
-     * @ORM\JoinTable(name="jobs_summaries")
+     * @ORM\OneToMany(targetEntity="App\Entity\Application", mappedBy="job")
      */
-    private $summaries;
+    private $applications;
 
     /**
      * Job constructor.
      */
     public function __construct()
     {
-        $this->summaries = new ArrayCollection();
+        $this->applications = new ArrayCollection();
     }
 
     /**
@@ -212,6 +223,26 @@ class Job
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return $this
+     */
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
     }
 
     /**
@@ -471,35 +502,35 @@ class Job
     }
 
     /**
-     * @return Summary[]|ArrayCollection
+     * @return Application[]|ArrayCollection
      */
-    public function getSummaries(): ?array
+    public function getApplications(): ?array
     {
-        return $this->summaries->toArray();
+        return $this->applications->toArray();
     }
 
     /**
-     * @param Summary $summary
+     * @param Application $application
      *
      * @return self
      */
-    public function addSummary(Summary $summary): self
+    public function addApplication(Application $application): self
     {
-        if (!$this->summaries->contains($summary)) {
-            $this->summaries->add($summary);
+        if (!$this->applications->contains($application)) {
+            $this->applications->add($application);
         }
 
         return $this;
     }
 
     /**
-     * @param Summary $summary
+     * @param Application $application
      *
      * @return $this
      */
-    public function removeSummary(Summary $summary): self
+    public function removeApplication(Application $application): self
     {
-        $this->summaries->removeElement($summary);
+        $this->applications->removeElement($application);
 
         return $this;
     }
@@ -530,6 +561,6 @@ class Job
      */
     public function __toString(): string
     {
-        return 'ID: ' . $this->id . ' Position: ' . $this->position;
+        return $this->name;
     }
 }

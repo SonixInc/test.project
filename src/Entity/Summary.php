@@ -101,19 +101,23 @@ class Summary
     private $user;
 
     /**
-     * @var ArrayCollection|Job[]
+     * @var Application
      *
-     * @ORM\ManyToMany(targetEntity="App\Entity\Job", mappedBy="summaries")
-     *
-     * @Groups("read")
+     * @ORM\OneToMany(targetEntity="App\Entity\Application", mappedBy="summary")
      */
-    private $jobs;
+    private $applications;
 
+    /**
+     * Summary constructor.
+     */
     public function __construct()
     {
-        $this->jobs = new ArrayCollection();
+        $this->applications = new ArrayCollection();
     }
 
+    /**
+     * @return int
+     */
     public function getId(): ?int
     {
         return $this->id;
@@ -285,35 +289,35 @@ class Summary
     }
 
     /**
-     * @return Job[]|ArrayCollection
+     * @return Application[]|ArrayCollection
      */
-    public function getJobs(): ?array
+    public function getApplications(): ?array
     {
-        return $this->jobs->toArray();
+        return $this->applications->toArray();
     }
 
     /**
-     * @param Job $job
+     * @param Application $application
      *
      * @return self
      */
-    public function addJob(Job $job): self
+    public function addApplication(Application $application): self
     {
-        if (!$this->jobs->contains($job)) {
-            $this->jobs->add($job);
+        if (!$this->applications->contains($application)) {
+            $this->applications->add($application);
         }
 
         return $this;
     }
 
     /**
-     * @param Job $job
+     * @param Application $application
      *
-     * @return self
+     * @return $this
      */
-    public function removeJob(Job $job): self
+    public function removeApplication(Application $application): self
     {
-        $this->jobs->removeElement($job);
+        $this->applications->removeElement($application);
 
         return $this;
     }

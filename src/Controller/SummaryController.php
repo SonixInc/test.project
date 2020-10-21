@@ -4,12 +4,15 @@
 namespace App\Controller;
 
 
+use App\Entity\Application;
+use App\Entity\Job;
 use App\Entity\Summary;
 use App\Entity\User;
 use App\Form\SummaryType;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,11 +30,47 @@ class SummaryController extends AbstractController
      *
      * @Route("summary", name="summary", methods={"GET"})
      *
+     * @param Request            $request   Http request
+     * @param PaginatorInterface $paginator Knp paginator
+     *
      * @return Response
      */
-    public function index(): Response
+    public function index(Request $request, PaginatorInterface $paginator): Response
     {
-        return $this->render('summary/index.html.twig');
+        /** @var Summary[] $summaries */
+        $summaries = $paginator->paginate(
+            $this->getDoctrine()->getRepository(Summary::class)->findAll(),
+            $request->query->getInt('page', 1),
+            $this->getParameter('max_per_page')
+        );
+
+        return $this->render('summary/index.html.twig', [
+            'summaries' => $summaries
+        ]);
+    }
+
+    /**
+     * List of auth user summaries
+     *
+     * @Route("summary/own", name="summary.own", methods={"GET"})
+     *
+     * @param Request            $request   Http request
+     * @param PaginatorInterface $paginator Knp paginator
+     *
+     * @return Response
+     */
+    public function own(Request $request, PaginatorInterface $paginator): Response
+    {
+        /** @var Summary[] $summaries */
+        $summaries = $paginator->paginate(
+            $this->getDoctrine()->getRepository(Summary::class)->findBy(['user' => $this->getUser()]),
+            $request->query->getInt('page', 1),
+            $this->getParameter('max_per_page')
+        );
+
+        return $this->render('summary/index.html.twig', [
+            'summaries' => $summaries
+        ]);
     }
 
     /**
@@ -81,5 +120,32 @@ class SummaryController extends AbstractController
         return $this->render('summary/show.html.twig', [
             'summary' => $summary
         ]);
+    }
+
+    /**
+     * @Route(
+     *     "summary/{id}/viewed/{job_id}",
+     *     name="summary.view",
+     *     methods={"GET"},
+     *     requirements={"id" = "\d+", "job_id" = "\d+"}
+     * )
+     * @ParamConverter("job", options={"id" = "job_id"})
+     *
+     * @param Summary                $summary Summary entity
+     * @param Job                    $job     Job entity
+     * @param EntityManagerInterface $em      Entity manager
+     *
+     * @return Response
+     */
+    public function view(Summary $summary, Job $job, EntityManagerInterface $em): Response
+    {
+        if ($this->getUser()->getId() === $job->getCompany()->getUser()->getId()) {
+            /** @var Application $application */
+            $application = $em->getRepository(Application::class)->findOneBy(['job' => $job, 'summary' => $summary]);
+            $application->setViewed(true);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('summary.show', ['id' => $summary->getId()]);
     }
 }

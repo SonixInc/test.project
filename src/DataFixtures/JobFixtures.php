@@ -33,6 +33,7 @@ class JobFixtures extends Fixture implements DependentFixtureInterface
 
 
         $jobSensioLabs = new Job();
+        $jobSensioLabs->setName('Web developer');
         $jobSensioLabs->setCategory($categoryProgramming);
         $jobSensioLabs->setType('full-time');
         $jobSensioLabs->setCompany($company1);
@@ -47,6 +48,7 @@ class JobFixtures extends Fixture implements DependentFixtureInterface
         $jobSensioLabs->setExpiresAt(new \DateTime('+30 days'));
 
         $jobExtremeSensio = new Job();
+        $jobExtremeSensio->setName('Marketer');
         /** @var Category $categoryDesign */
         $categoryDesign = $manager->merge($this->getReference('category-design'));
         $jobExtremeSensio->setCategory($categoryDesign);
@@ -63,6 +65,7 @@ class JobFixtures extends Fixture implements DependentFixtureInterface
         $jobExtremeSensio->setExpiresAt(new \DateTime('+30 days'));
 
         $jobExpired = new Job();
+        $jobExpired->setName('Java developer');
         $jobExpired->setCategory($categoryProgramming);
         $jobExpired->setType('full-time');
         $jobExpired->setCompany($company2);
@@ -78,6 +81,7 @@ class JobFixtures extends Fixture implements DependentFixtureInterface
 
         for ($i = 100; $i <= 130; $i++) {
             $job = new Job();
+            $job->setName('Name' . $i);
             $job->setCategory($categoryProgramming);
             $job->setType('full-time');
             $job->setCompany($company1);

@@ -4,6 +4,7 @@
 namespace App\Controller;
 
 
+use App\Entity\Application;
 use App\Entity\Category;
 use App\Entity\Job;
 use App\Entity\Summary;
@@ -201,13 +202,17 @@ class JobController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
+        $application = new Application();
 
-        $form = $this->createForm(RespondFormType::class, $job, [
+        $form = $this->createForm(RespondFormType::class, $application, [
             'user_summaries' => $em->getRepository(Summary::class)->findBy(['user' => $user->getId()])
         ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $application->setJob($job);
+
+            $em->persist($application);
             $em->flush();
 
             return $this->redirectToRoute('job.show', ['id' => $job->getId()]);

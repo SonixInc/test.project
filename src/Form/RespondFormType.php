@@ -3,7 +3,7 @@
 
 namespace App\Form;
 
-use App\Entity\Job;
+use App\Entity\Application;
 use App\Entity\Summary;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -25,8 +25,7 @@ class RespondFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('summaries', EntityType::class, [
-                'multiple'     => true,
+            ->add('summary', EntityType::class, [
                 'class'        => Summary::class,
                 'choice_label' => 'category',
                 'choices'      => $options['user_summaries'],
@@ -42,7 +41,7 @@ class RespondFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class'     => Job::class,
+            'data_class'     => Application::class,
             'user_summaries' => null
         ]);
     }

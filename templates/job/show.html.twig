@@ -66,17 +66,17 @@
             </div>
         </div>
 
-        {% if job.summaries %}
+        {% if job.applications %}
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-header">Summaries</div>
                     <div class="card-body">
                         <table class="table mb-0">
                             <tbody>
-                                {% for summary in job.summaries %}
+                                {% for application in job.applications %}
                                     <tr>
-                                        <td>{{ summary.user }}</td>
-                                        <td><a href="{{ path('summary.show', {'id': summary.id}) }}">{{ summary.category }}</a></td>
+                                        <td>{{ application.summary.user }}</td>
+                                        <td><a href="{{ path('summary.view', {'id': application.summary.id, 'job_id': job.id}) }}">{{ application.summary.category }}</a></td>
                                     </tr>
                                 {% endfor %}
                             </tbody>

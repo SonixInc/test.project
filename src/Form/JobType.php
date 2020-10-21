@@ -24,6 +24,11 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
 
+/**
+ * Class JobType
+ *
+ * @package App\Form
+ */
 class JobType extends AbstractType
 {
     /**
@@ -44,6 +49,12 @@ class JobType extends AbstractType
         $activeCompanies = $this->em->getRepository(Company::class)->getActiveCompanies();
 
         $builder
+            ->add('name', TextType::class, [
+                'constraints' => [
+                    new NotBlank(),
+                    new Length(['max' => 255]),
+                ]
+            ])
             ->add('type', ChoiceType::class, [
                 'choices' => array_combine(Job::TYPES, Job::TYPES),
                 'expanded' => true,
