@@ -1,17 +1,22 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ 'Jobs in the %category% category'|trans({'%category%': category.name}) }}
+    {{ 'Jobs in the {category} category'|trans({'category': category.name}) }}
 {% endblock %}
 
 {% block body %}
+
     {% include 'job/_job_history.html.twig' with {'historyJobs': historyJobs} only %}
 
-    <h4>{{ category.name }}</h4>
+    <div class="py-3">
+        <h4>{{ category.name }}</h4>
+    </div>
 
-    {% include 'job/table.html.twig' with {'jobs': activeJobs} only %}
+    <div class="box">
+        {% include 'job/table.html.twig' with {'jobs': activeJobs} only %}
+    </div>
 
-    <div class="navigation text-center">
+    <div class="navigation">
         {{ knp_pagination_render(activeJobs) }}
     </div>
 {% endblock %}

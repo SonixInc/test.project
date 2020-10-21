@@ -1,16 +1,20 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Summary creation</h1>
+    <div class="card">
+        <div class="card-header">
+            Summary creation
+        </div>
+        <div class="card-body">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
 
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-
-    <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-primary">Create</button>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+            {{ form_end(form) }}
         </div>
     </div>
-    {{ form_end(form) }}
+
 {% endblock %}
 

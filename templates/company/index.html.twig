@@ -2,36 +2,38 @@
 
 {% block body %}
     <h3>Companies</h3>
-    
-    <table class="table text-center">
-        <thead>
-        <tr>
-            <th class="active text-center">Name</th>
-            <th class="active text-center">Url</th>
-            <th class="active text-center">Status</th>
-        </tr>
-        </thead>
 
-        <tbody>
-        {% for company in companies %}
+    <div class="box">
+        <table class="table table-bordered table-hover text-center">
+            <thead>
             <tr>
-                <td><a href="{{ path('company.show', {id: company.id}) }}">{{ company.name }}</a></td>
-                <td>
-                    {% if company.url %}
-                        <span>{{ company.url }}</span>
-                    {% endif %}
-                </td>
-
-                <td>
-                    {% if company.active %}
-                        <span>Active</span>
-                    {% else %}
-                        <span>Not active</span>
-                    {% endif %}
-                </td>
+                <th class="active text-center">Name</th>
+                <th class="active text-center">Url</th>
+                <th class="active text-center">Status</th>
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+
+            <tbody>
+            {% for company in companies %}
+                <tr>
+                    <td><a href="{{ path('company.show', {id: company.id}) }}">{{ company.name }}</a></td>
+                    <td>
+                        {% if company.url %}
+                            <span>{{ company.url }}</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if company.active %}
+                            <span class="badge btn-primary">Active</span>
+                        {% else %}
+                            <span class="badge badge-secondary">Not active</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}
 

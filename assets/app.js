@@ -8,8 +8,4 @@ global.$ = global.jQuery = $;
 
 require('bootstrap');
 
-$(document).ready(function() {
-    $(".dropdown-toggle").dropdown();
-});
-
 

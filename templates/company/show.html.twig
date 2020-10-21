@@ -5,7 +5,7 @@
     {% if company.logo %}
         <div class="media-left">
             <a href="{{ company.url }}" target="_blank">
-                <img class="media-object" style="width:100px; height:100px;" src="{{ asset(companies_web_directory ~ '/' ~ company.logo) }}">
+                <img class="media-object mr-3" style="width:100px; height:100px;" src="{{ asset(companies_web_directory ~ '/' ~ company.logo) }}">
             </a>
         </div>
     {% endif %}
@@ -15,9 +15,12 @@
             <div class="col-sm-10">
                 <h3 class="media-heading"><strong>{{ company.name }}</strong></h3>
             </div>
+            <div class="col-sm-2">
+                <a href="{{ company.url }}">{{ company.url }}</a>
+            </div>
         </div>
 
-        <div>
+        <div class="py-3">
             <h4>Jobs</h4>
 
             <table class="table table-striped">
@@ -44,26 +47,27 @@
 
         <div class="row">
             <div class="col-sm-12 text-right">
-                <a class="btn btn-default" href="{{ path('job.list') }}">
+                <a class="btn btn-primary" href="{{ path('job.list') }}">
                     <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
                     Back to list
                 </a>
             </div>
         </div>
 
-        <div class="company-feedback">
-            <div class="panel panel-default">
-                <div class="panel-heading"><h3>Feedback</h3></div>
-                <div class="panel-body">
+        <div class="card mt-5">
+                <div class="card-header">Feedback</div>
+                <div class="card-body">
                     {% for feedback in company.feedbacks %}
-                        <div class="company-feedback-item">
-                            <h4>{{ feedback.user.username }}</h4>
-                            <p>{{ feedback.content }}</p>
+                        <div class="feedback-msg">
+                            <div class="feedback-name">
+                                {{ feedback.user.username }}
+                            </div>
+                            <p class="feedback-text">{{ feedback.content }}</p>
                         </div>
                     {% endfor %}
                 </div>
                 {% if app.user %}
-                    <div class="panel-footer">
+                    <div class="card-footer">
                         {{ form_start(form) }}
                             {{ form_widget(form) }}
 

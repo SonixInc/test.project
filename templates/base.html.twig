@@ -5,86 +5,80 @@
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     {{ encore_entry_link_tags('app') }}
 </head>
 <body>
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="{{ path('home') }}">{{ 'Jobeet'|trans }}</a>
-        </div>
+<nav class="navbar navbar-expand-md navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="{{ path('home') }}">{{ 'Jobeet'|trans }}</a>
 
-        <div>
-            <ul class="nav navbar-nav navbar-right">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a href="{{ path('summary') }}">{{ 'Summaries'|trans }}</a>
+                    <a class="nav-link" href="{{ path('summary') }}">{{ 'Summaries'|trans }}</a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ path('company') }}">{{ 'Companies'|trans }}</a>
+                    <a class="nav-link" href="{{ path('company') }}">{{ 'Companies'|trans }}</a>
                 </li>
                 {% if not app.user %}
                     <li class="nav-item">
-                        <a href="{{ path('app_login') }}">{{ 'Login'|trans }}</a>
+                        <a class="nav-link" href="{{ path('app_login') }}">{{ 'Login'|trans }}</a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ path('app_register') }}">{{ 'Register'|trans }}</a>
+                        <a class="nav-link" href="{{ path('app_register') }}">{{ 'Register'|trans }}</a>
                     </li>
                 {% else %}
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ app.user }}</a>
-                        <ul class="dropdown-menu">
+                    <li class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ app.user }}</a>
+                        <div class="dropdown-menu">
                             {% if is_granted('ROLE_ADMIN') %}
-                                <li class="nav-item">
-                                    <a href="{{ path('admin') }}">{{ 'Admin Panel'|trans }}</a>
-                                </li>
+                                <a class="dropdown-item" href="{{ path('admin') }}">{{ 'Admin Panel'|trans }}</a>
                             {% endif %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ path('app_logout') }}">{{ 'Logout'|trans }}</a>
-                            </li>
-                        </ul>
+                            <a class="dropdown-item" href="{{ path('app_logout') }}">{{ 'Logout'|trans }}</a>
+                        </div>
                     </li>
 
                     <li style="margin-right: 10px">
                         <div>
-                            <a href="{{ path('company.create') }}" class="btn btn-default navbar-btn">{{ 'Register company'|trans }}</a>
+                            <a href="{{ path('company.create') }}" class="nav-link btn btn-default navbar-btn">{{ 'Register company'|trans }}</a>
                         </div>
                     </li>
                     <li style="margin-right: 10px">
                         <div>
-                            <a href="{{ path('affiliate.create') }}" class="btn btn-default navbar-btn">{{ 'Affiliates'|trans }}</a>
+                            <a href="{{ path('affiliate.create') }}" class="nav-link btn btn-default navbar-btn">{{ 'Affiliates'|trans }}</a>
                         </div>
                     </li>
 
                     {% if is_granted('ROLE_COMPANY') %}
                         <li>
                             <div>
-                                <a href="{{ path('job.create') }}" class="btn btn-default navbar-btn">{{ 'Post a Job'|trans }}</a>
+                                <a href="{{ path('job.create') }}" class="nav-link btn btn-default navbar-btn">{{ 'Post a Job'|trans }}</a>
                             </div>
                         </li>
                     {% endif %}
 
                 {% endif %}
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ app.request.locale|upper }}<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ app.request.locale|upper }}<span class="caret"></span></a>
+                    <div class="dropdown-menu">
                         {% for locale in locales %}
-                            <li>
-                                <a href="{{ path(app.request.get('_route'), app.request.attributes.get('_route_params')|merge({'_locale': locale})) }}">
-                                    {{ locale|upper }}
-                                </a>
-                            </li>
+                            <a class="dropdown-item" href="{{ path(app.request.get('_route'), app.request.attributes.get('_route_params')|merge({'_locale': locale})) }}">
+                                {{ locale|upper }}
+                            </a>
                         {% endfor %}
-                    </ul>
+                    </div>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
 
-<div class="container">
-    {% block body %}{% endblock %}
-</div>
+<main class="app-content py-3">
+    <div class="container">
+        {% block body %}{% endblock %}
+    </div>
+</main>
+
 
 {{ encore_entry_script_tags('app') }}
 {% block javascripts %}

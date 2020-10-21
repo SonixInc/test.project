@@ -3,14 +3,18 @@
 {% block body %}
     {% include 'job/_job_history.html.twig' with {'historyJobs': historyJobs} only %}
 
-    {% for category in categories %}
-        <h4>
-            <a href="{{ path('category.show', {slug: category.slug}) }}">{{ category.name }}</a>
-        </h4>
+    <div class="py-3">
+        {% for category in categories %}
+            <div class="box">
+                <h4>
+                    <a href="{{ path('category.show', {slug: category.slug}) }}">{{ category.name }}</a>
+                </h4>
 
-        {% include 'job/table.html.twig' with {
-            'jobs': category.activeJobs|slice(0, max_jobs_on_homepage)
-        } only %}
+                {% include 'job/table.html.twig' with {
+                    'jobs': category.activeJobs|slice(0, max_jobs_on_homepage)
+                } only %}
+            </div>
+        {% endfor %}
+    </div>
 
-    {% endfor %}
 {% endblock %}

@@ -1,14 +1,81 @@
+@import "~bootstrap/scss/bootstrap";
 
+.navbar {
+  background-color: #0c64a2;
+  padding: 0.35rem 1rem;
+}
 
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
 
-.company-feedback {
-  margin-top: 50px;
+.app-content {
+  flex: 1;
+}
 
-  .company-feedback-item {
-    margin-bottom: 50px;
+.controls {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+
+  & > * {
+    margin-right: 4px;
 
     &:last-child {
-      margin-bottom: 0;
+      margin-right: 0;
     }
   }
+}
+
+.box {
+  background: #fff;
+  box-shadow: 0 0 2px rgba(0,0,0,0.1);
+}
+
+.table {
+  th,
+  td {
+    vertical-align: middle;
+  }
+}
+
+.card {
+  &> .table-bordered {
+    border: none;
+    margin-top: -1px;
+
+    th:first-child, td:first-child {
+      border-left: none;
+    }
+
+    th:last-child, td:last-child {
+      border-right: none;
+    }
+
+    th, td {
+      border-bottom: none;
+    }
+  }
+}
+
+.feedback-msg {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.feedback-name {
+  font-weight: 600;
+}
+
+.feedback-text {
+  border-radius: 5px;
+  position: relative;
+  padding: 8px 10px;
+  background: #fff;
+  border: 1px solid #d2d6de;
+  margin-top: 5px;
+  color: #444444;
 }
