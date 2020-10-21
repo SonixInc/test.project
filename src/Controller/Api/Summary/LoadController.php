@@ -34,7 +34,7 @@ class LoadController extends AbstractController
         $summaries = $paginator->paginate(
             $this->getDoctrine()->getRepository(Summary::class)->findAll(),
             $request->query->getInt('page', 1),
-            1
+            5
         );
 
         return $this->render('summary/_index_table.html.twig', [

@@ -11,7 +11,13 @@ use App\Entity\Job;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
+use function Doctrine\ORM\QueryBuilder;
 
+/**
+ * Class JobRepository
+ *
+ * @package App\Repository
+ */
 class JobRepository extends EntityRepository
 {
     /**
@@ -58,18 +64,29 @@ class JobRepository extends EntityRepository
     /**
      * @param Category $category
      *
+     * @param null     $search
+     *
      * @return AbstractQuery
      */
-    public function getPaginatedActiveJobsByCategoryQuery(Category $category) : AbstractQuery
+    public function getPaginatedActiveJobsByCategoryQuery(Category $category, $search = null) : AbstractQuery
     {
-        return $this->createQueryBuilder('j')
+        $qb = $this->createQueryBuilder('j')
+            ->innerJoin('j.company', 'c')
             ->where('j.category = :category')
             ->andWhere('j.expiresAt > :date')
             ->andWhere('j.activated = :activated')
             ->setParameter('category', $category)
             ->setParameter('date', new \DateTime())
-            ->setParameter('activated', true)
-            ->getQuery();
+            ->setParameter('activated', true);
+
+        if ($search) {
+            $qb->andWhere($qb->expr()->like('LOWER(j.location)', ':search'))
+                ->orWhere($qb->expr()->like('LOWER(j.position)', ':search'))
+                ->orWhere($qb->expr()->like('LOWER(c.name)', ':search'))
+                ->setParameter('search', '%' . mb_strtolower($search) . '%');
+        }
+
+        return $qb->getQuery();
     }
 
     public function getPaginatedActiveJobsByCompanyQuery(Company $company): AbstractQuery

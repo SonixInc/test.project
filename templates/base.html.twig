@@ -34,18 +34,10 @@
                             {% if is_granted('ROLE_ADMIN') %}
                                 <a class="dropdown-item" href="{{ path('admin') }}">{{ 'Admin Panel'|trans }}</a>
                             {% endif %}
+                            <a class="dropdown-item" href="{{ path('company.create') }}">{{ 'Register your company'|trans }}</a>
+                            <a class="dropdown-item" href="{{ path('summary.create') }}">Post your summary</a>
+                            <a class="dropdown-item" href="{{ path('affiliate.create') }}">{{ 'Become an affiliates'|trans }}</a>
                             <a class="dropdown-item" href="{{ path('app_logout') }}">{{ 'Logout'|trans }}</a>
-                        </div>
-                    </li>
-
-                    <li style="margin-right: 10px">
-                        <div>
-                            <a href="{{ path('company.create') }}" class="nav-link btn btn-default navbar-btn">{{ 'Register company'|trans }}</a>
-                        </div>
-                    </li>
-                    <li style="margin-right: 10px">
-                        <div>
-                            <a href="{{ path('affiliate.create') }}" class="nav-link btn btn-default navbar-btn">{{ 'Affiliates'|trans }}</a>
                         </div>
                     </li>
 

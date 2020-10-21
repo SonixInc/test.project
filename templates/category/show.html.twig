@@ -12,6 +12,20 @@
         <h4>{{ category.name }}</h4>
     </div>
 
+    <div class="card mb-3">
+        <div class="card-body">
+            {{ form_start(form) }}
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form_widget(form.query) }}
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="box">
         {% include 'job/table.html.twig' with {'jobs': activeJobs} only %}
     </div>
