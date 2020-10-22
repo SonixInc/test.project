@@ -141,6 +141,7 @@ class Company
 
     public function __construct()
     {
+        $this->active = false;
         $this->jobs = new ArrayCollection();
         $this->feedbacks = new ArrayCollection();
     }
@@ -356,7 +357,6 @@ class Company
      */
     public function prePersist(): void
     {
-        $this->active = false;
         $this->updatedAt = new \DateTime();
     }
 
