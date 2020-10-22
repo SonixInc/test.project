@@ -44,6 +44,30 @@ class CompanyController extends AbstractController
     }
 
     /**
+     * List of auth user companies
+     *
+     * @Route("company/own", name="company.own", methods={"GET"})
+     *
+     * @param Request            $request   Http request
+     * @param PaginatorInterface $paginator Knp paginator
+     *
+     * @return Response
+     */
+    public function own(Request $request, PaginatorInterface $paginator): Response
+    {
+        /** @var Company[] $companies */
+        $companies = $paginator->paginate(
+            $this->getDoctrine()->getRepository(Company::class)->findBy(['user' => $this->getUser()]),
+            $request->query->getInt('page', 1),
+            $this->getParameter('max_per_page')
+        );
+
+        return $this->render('company/index.html.twig', [
+            'companies' => $companies
+        ]);
+    }
+
+    /**
      * Create a new company
      *
      * @Route("company/create", name="company.create", methods={"GET|POST"})

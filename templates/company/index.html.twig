@@ -3,8 +3,21 @@
 {% block body %}
     <h3>Companies</h3>
 
+    {% if app.user %}
+        {% set route = app.request.attributes.get('_route') %}
+
+        <ul class="nav nav-tabs mb-4">
+            <li class="nav-item">
+                <a class="nav-link {% if route == 'company' %}active{% endif %}" href="{{ path('company') }}">Summaries</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if route == 'company.own' %}active{% endif %}" href="{{ path('company.own') }}">Own</a>
+            </li>
+        </ul>
+    {% endif %}
+
     <div class="box">
-        <table class="table table-bordered table-hover text-center">
+        <table class="table table-striped table-hover text-center">
             <thead>
             <tr>
                 <th class="active text-center">Name</th>
