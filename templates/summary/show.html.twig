@@ -12,43 +12,78 @@
         </div>
     {% endif %}
 
-    <div class="card">
-        <div class="card-header">Summary</div>
-        <div class="card-body">
-            <table class="table table-striped">
-                <tbody>
-                <tr>
-                    <th>First name</th>
-                    <td>{{ summary.firstName }}</td>
-                </tr>
-                <tr>
-                    <th>Last name</th>
-                    <td>{{ summary.lastName }}</td>
-                </tr>
-                <tr>
-                    <th>City</th>
-                    <td>{{ summary.city }}</td>
-                </tr>
-                <tr>
-                    <th>Sex</th>
-                    <td>{{ summary.sex }}</td>
-                </tr>
-                <tr>
-                    <th>Phone</th>
-                    <td>{{ summary.phone }}</td>
-                </tr>
-                <tr>
-                    <th>Education</th>
-                    <td>{{ summary.education }}</td>
-                </tr>
-                <tr>
-                    <th>Category</th>
-                    <td>{{ summary.category }}</td>
-                </tr>
-                </tbody>
-            </table>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">Summary</div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <tbody>
+                        <tr>
+                            <th>First name</th>
+                            <td>{{ summary.firstName }}</td>
+                        </tr>
+                        <tr>
+                            <th>Last name</th>
+                            <td>{{ summary.lastName }}</td>
+                        </tr>
+                        <tr>
+                            <th>City</th>
+                            <td>{{ summary.city }}</td>
+                        </tr>
+                        <tr>
+                            <th>Sex</th>
+                            <td>{{ summary.sex }}</td>
+                        </tr>
+                        <tr>
+                            <th>Phone</th>
+                            <td>{{ summary.phone }}</td>
+                        </tr>
+                        <tr>
+                            <th>Education</th>
+                            <td>{{ summary.education }}</td>
+                        </tr>
+                        <tr>
+                            <th>Category</th>
+                            <td>{{ summary.category }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
+
+        {% if summary.user == app.user %}
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Application</div>
+                    <div class="card-body">
+                        <table class="table mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Job</th>
+                                    <th>Viewed</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for application in summary.applications %}
+                                    <tr>
+                                        <td><a href="{{ path('job.show', {'id': application.job.id}) }}">{{ application.job.name }}</a></td>
+                                        {% if application.viewed %}
+                                            <td><span class="badge badge-success">Viewed by employer</span></td>
+                                        {% else %}
+                                            <td><span class="badge badge-secondary">Not viewed</span></td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
     </div>
+
 
 {% endblock %}
 
