@@ -6,12 +6,12 @@ namespace App\Controller;
 
 use App\Entity\Application;
 use App\Entity\Category;
+use App\Entity\Company;
 use App\Entity\Job;
 use App\Entity\Summary;
 use App\Entity\User;
 use App\Form\JobType;
 use App\Form\RespondFormType;
-use App\Service\FileUploader;
 use App\Service\JobHistoryService;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
@@ -61,8 +61,13 @@ class JobController extends AbstractController
      */
     public function create(Request $request, EntityManagerInterface $em): Response
     {
+        /** @var User $user */
+        $user = $this->getUser();
         $job = new Job();
-        $form = $this->createForm(JobType::class, $job);
+
+        $form = $this->createForm(JobType::class, $job, [
+            'companies' => $em->getRepository(Company::class)->findActiveCompaniesForUser($user)
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -94,7 +99,12 @@ class JobController extends AbstractController
      */
     public function edit(Request $request, Job $job, EntityManagerInterface $em): Response
     {
-        $form = $this->createForm(JobType::class, $job);
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $form = $this->createForm(JobType::class, $job, [
+            'companies' => $em->getRepository(Company::class)->findActiveCompaniesForUser($user)
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

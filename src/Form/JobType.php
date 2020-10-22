@@ -32,22 +32,10 @@ use Symfony\Component\Validator\Constraints\NotNull;
 class JobType extends AbstractType
 {
     /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    public function __construct(EntityManagerInterface $em)
-    {
-        $this->em = $em;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $activeCompanies = $this->em->getRepository(Company::class)->getActiveCompanies();
-
         $builder
             ->add('name', TextType::class, [
                 'constraints' => [
@@ -65,7 +53,7 @@ class JobType extends AbstractType
             ->add('company', EntityType::class, [
                 'class' => Company::class,
                 'choice_label' => 'name',
-                'choices' => $activeCompanies,
+                'choices' => $options['companies'],
                 'constraints' => [
                     new NotBlank(),
                 ]
@@ -133,7 +121,8 @@ class JobType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Job::class
+            'data_class' => Job::class,
+            'companies' => null
         ]);
     }
 }
