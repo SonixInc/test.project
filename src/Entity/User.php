@@ -128,7 +128,7 @@ class User implements UserInterface, EquatableInterface
      *
      * @return $this
      */
-    public function setRoles(string $role): self
+    public function addRole(string $role): self
     {
         if (!\in_array($role, $this->roles, true)) {
             $this->roles[] = $role;

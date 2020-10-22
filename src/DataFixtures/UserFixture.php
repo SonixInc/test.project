@@ -40,7 +40,7 @@ class UserFixture extends Fixture
 
         $admin = new User();
         $admin->setUsername('admin');
-        $admin->setRoles(User::ROLE_ADMIN);
+        $admin->addRole(User::ROLE_ADMIN);
         $admin->setPassword($this->passwordEncoder->encodePassword(
             $admin,
             'secret'

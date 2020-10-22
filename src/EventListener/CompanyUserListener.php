@@ -43,7 +43,7 @@ class CompanyUserListener
 
         /** @var User $user */
         if ($user = $this->security->getUser()) {
-            $user->setRoles(User::ROLE_COMPANY);
+            $user->addRole(User::ROLE_COMPANY);
             $entity->setUser($user);
         }
     }

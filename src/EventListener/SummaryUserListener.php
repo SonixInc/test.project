@@ -45,7 +45,7 @@ class SummaryUserListener
 
         /** @var User $user */
         if ($user = $this->security->getUser()) {
-            $user->setRoles(User::ROLE_WORKER);
+            $user->addRole(User::ROLE_WORKER);
             $entity->setUser($user);
         }
     }

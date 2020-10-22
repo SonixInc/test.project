@@ -7,6 +7,7 @@ use App\Entity\Category;
 use App\Entity\Company;
 use App\Entity\Job;
 use App\Entity\Summary;
+use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -63,6 +64,9 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Affiliates', 'fa fa-grip-vertical', Affiliate::class),
             MenuItem::linkToCrud('Companies', 'fa fa-grip-vertical', Company::class),
             MenuItem::linkToCrud('Summaries', 'fa fa-grip-vertical', Summary::class),
+
+            MenuItem::section('User'),
+            MenuItem::linkToCrud('Users', 'fa fa-user', User::class),
         ];
     }
 }
