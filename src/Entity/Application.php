@@ -25,14 +25,14 @@ class Application
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Job", inversedBy="application")
-     * @ORM\JoinColumn(name="job_id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Job", inversedBy="applications")
+     * @ORM\JoinColumn(name="job_id", nullable=false, onDelete="CASCADE")
      */
     private $job;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Summary", inversedBy="application")
-     * @ORM\JoinColumn(name="summary_id", nullable=false)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Summary", inversedBy="applications")
+     * @ORM\JoinColumn(name="summary_id", nullable=false, onDelete="CASCADE")
      */
     private $summary;
 

@@ -70,7 +70,7 @@ class Job
      * @var Company
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="jobs")
-     * @ORM\JoinColumn(name="company_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="company_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      *
      * @Groups("write")
      *

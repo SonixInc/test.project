@@ -1,11 +1,23 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+
+{% if app.user == company.user %}
+    <div class="controls">
+        <a class="btn btn-success" href="{{ path('company.edit', {'id': company.id}) }}">Edit</a>
+        <form method="POST" action="{{ path('company.delete', {'id': company.id}) }}" onsubmit="return confirm('Are you sure?')">
+            <input type="hidden" name="_method" value="DELETE">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ company.id) }}">
+            <button class="btn btn-danger">Delete</button>
+        </form>
+    </div>
+{% endif %}
+
 <div class="media" style="margin-top: 60px;">
     {% if company.logo %}
         <div class="media-left">
             <a href="{{ company.url }}" target="_blank">
-                <img class="media-object mr-3" style="width:100px; height:100px;" src="{{ asset(companies_web_directory ~ '/' ~ company.logo) }}">
+                <img class="media-object mr-3" style="width:100px; height:100px;" src="{{ asset(companies_web_directory ~ '/' ~ company.logo.filename) }}">
             </a>
         </div>
     {% endif %}

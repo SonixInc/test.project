@@ -118,7 +118,7 @@ class Company
     /**
      * @var ArrayCollection|Feedback[]
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Feedback", mappedBy="company")
+     * @ORM\OneToMany(targetEntity="App\Entity\Feedback", mappedBy="company", cascade={"all"})
      *
      * @Groups("read")
      */
@@ -182,7 +182,7 @@ class Company
     }
 
     /**
-     * @param $logo
+     * @param string|null|UploadedFile $logo
      *
      * @return self
      */

@@ -1,6 +1,17 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    {% if app.user == summary.user %}
+        <div class="controls">
+            <a class="btn btn-success" href="{{ path('summary.edit', {'id': summary.id}) }}">Edit</a>
+            <form method="POST" action="{{ path('summary.delete', {'id': summary.id}) }}" onsubmit="return confirm('Are you sure?')">
+                <input type="hidden" name="_method" value="DELETE">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ summary.id) }}">
+                <button class="btn btn-danger">Delete</button>
+            </form>
+        </div>
+    {% endif %}
+
     <div class="card">
         <div class="card-header">Summary</div>
         <div class="card-body">

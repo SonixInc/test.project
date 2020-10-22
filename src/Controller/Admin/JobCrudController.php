@@ -52,6 +52,7 @@ class JobCrudController extends AbstractCrudController
     {
         return [
             Field\IdField::new('id')->onlyOnIndex(),
+            Field\TextField::new('name'),
             Field\ChoiceField::new('type')->setChoices(array_combine(Job::TYPES, Job::TYPES))->hideOnIndex(),
             Field\AssociationField::new('company'),
             Field\TextField::new('position'),

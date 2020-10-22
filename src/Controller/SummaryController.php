@@ -108,6 +108,64 @@ class SummaryController extends AbstractController
     }
 
     /**
+     * Edit summary
+     *
+     * @Route("summary/{id}/edit", name="summary.edit", methods={"GET|POST"}, requirements={"id" = "\d+"})
+     *
+     * @param Request                $request Http request
+     * @param Summary                $summary Summary entity
+     * @param EntityManagerInterface $em      Entity manager
+     *
+     * @return Response
+     */
+    public function edit(Request $request, Summary $summary, EntityManagerInterface $em): Response
+    {
+        if ($summary->getUser() !== $this->getUser()) {
+            $this->addFlash('error', 'Access denied.');
+            return $this->redirectToRoute('summary.show', ['id' => $summary->getId()]);
+        }
+
+        $form = $this->createForm(SummaryType::class, $summary);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+
+            return $this->redirectToRoute('summary.show', ['id' => $summary->getId()]);
+        }
+
+        return $this->render('summary/edit.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Delete summary
+     *
+     * @Route("/summary/{id}/delete", name="summary.delete", methods={"DELETE"}, requirements={"id" = "\d+"})
+     *
+     * @param Request                $request Http request
+     * @param Summary                $summary Summary entity
+     * @param EntityManagerInterface $em      Entity manager
+     *
+     * @return Response
+     */
+    public function delete(Request $request, Summary $summary, EntityManagerInterface $em): Response
+    {
+        if ($summary->getUser() !== $this->getUser()) {
+            $this->addFlash('error', 'Access denied.');
+            return $this->redirectToRoute('summary.show', ['id' => $summary->getId()]);
+        }
+
+        if ($this->isCsrfTokenValid('delete' . $summary->getId(), $request->request->get('_token'))) {
+            $em->remove($summary);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('summary');
+    }
+
+    /**
      * Show summary entity
      *
      * @Route("summary/{id}", name="summary.show", methods={"GET"}, requirements={"id" = "\d+"})

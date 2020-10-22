@@ -11,6 +11,11 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
+/**
+ * Class CompanyUploadListener
+ *
+ * @package App\EventListener
+ */
 class CompanyUploadListener
 {
     /**
@@ -41,14 +46,12 @@ class CompanyUploadListener
      */
     private function uploadFile($entity): void
     {
-        // upload only works for Job entities
         if (!$entity instanceof Company) {
             return;
         }
 
         $logoFile = $entity->getLogo();
 
-        // only upload new files
         if ($logoFile instanceof UploadedFile) {
             $fileName = $this->uploader->upload($logoFile);
 

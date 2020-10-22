@@ -83,6 +83,64 @@ class CompanyController extends AbstractController
     }
 
     /**
+     * Edit company
+     *
+     * @Route("company/{id}/edit", name="company.edit", methods={"GET|POST"}, requirements={"id" = "\d+"})
+     *
+     * @param Request                $request Http request
+     * @param Company                $company Company entity
+     * @param EntityManagerInterface $em      Entity manager
+     *
+     * @return Response
+     */
+    public function edit(Request $request, Company $company, EntityManagerInterface $em): Response
+    {
+        if ($company->getUser() !== $this->getUser()) {
+            $this->addFlash('error', 'Access denied.');
+            return $this->redirectToRoute('company.show', ['id' => $company->getId()]);
+        }
+
+        $form = $this->createForm(CompanyType::class, $company);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+
+            return $this->redirectToRoute('company.show', ['id' => $company->getId()]);
+        }
+
+        return $this->render('company/edit.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Delete company
+     *
+     * @Route("/company/{id}/delete", name="company.delete", methods={"DELETE"}, requirements={"id" = "\d+"})
+     *
+     * @param Request                $request Http request
+     * @param Company                $company Company entity
+     * @param EntityManagerInterface $em      Entity manager
+     *
+     * @return Response
+     */
+    public function delete(Request $request, Company $company, EntityManagerInterface $em): Response
+    {
+        if ($company->getUser() !== $this->getUser()) {
+            $this->addFlash('error', 'Access denied.');
+            return $this->redirectToRoute('company.show', ['id' => $company->getId()]);
+        }
+
+        if ($this->isCsrfTokenValid('delete' . $company->getId(), $request->request->get('_token'))) {
+            $em->remove($company);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('company');
+    }
+
+    /**
      * Finds and display company entity
      *
      * @Route(
@@ -121,7 +179,7 @@ class CompanyController extends AbstractController
         );
 
         return $this->render('company/show.html.twig', [
-            'form' => $form->createView(),
+            'form'       => $form->createView(),
             'company'    => $company,
             'activeJobs' => $activeJobs,
         ]);
