@@ -38,6 +38,7 @@ class SubscriptionCrudController extends AbstractCrudController
         return [
             Field\IdField::new('id'),
             Field\TextField::new('customer_id', 'Customer ID'),
+            Field\TextField::new('type'),
             Field\BooleanField::new('canceled')->renderAsSwitch(false),
             Field\DateTimeField::new('current_period_start'),
             Field\DateTimeField::new('current_period_end'),

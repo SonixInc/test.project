@@ -15,6 +15,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Subscription
 {
+    public const BASIC = 'basic';
+    public const PREMIUM = 'premium';
+
     /**
      * @var string
      *
@@ -29,6 +32,13 @@ class Subscription
      * @ORM\Column(type="string", nullable=false)
      */
     private $customer_id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string")
+     */
+    private $type;
 
     /**
      * @var bool
@@ -94,6 +104,26 @@ class Subscription
     public function setCustomerId(string $customer_id): self
     {
         $this->customer_id = $customer_id;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return $this
+     */
+    public function setType(string $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }

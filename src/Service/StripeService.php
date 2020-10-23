@@ -6,6 +6,8 @@ namespace App\Service;
 use App\Entity\Subscription;
 use Stripe\Customer;
 use Stripe\StripeClient;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**
  * Class StripeService
@@ -18,15 +20,21 @@ class StripeService
      * @var StripeClient
      */
     private $stripeClient;
+    /**
+     * @var ParameterBagInterface
+     */
+    private $parameterBag;
 
     /**
      * StripeService constructor.
      *
-     * @param StripeClient $stripeClient
+     * @param StripeClient          $stripeClient
+     * @param ParameterBagInterface $parameterBag
      */
-    public function __construct(StripeClient $stripeClient)
+    public function __construct(StripeClient $stripeClient, ParameterBagInterface $parameterBag)
     {
         $this->stripeClient = $stripeClient;
+        $this->parameterBag = $parameterBag;
     }
 
     /**
@@ -66,6 +74,12 @@ class StripeService
         $subscription->setCanceled($stripeSubscription->cancel_at_period_end);
         $subscription->setCurrentPeriodStart($date->setTimestamp($stripeSubscription->current_period_start));
         $subscription->setCurrentPeriodEnd($date->setTimestamp($stripeSubscription->current_period_end));
+
+        if ($this->parameterBag->get('premium_subscribe_key') === $priceId) {
+            $subscription->setType(Subscription::PREMIUM);
+        } else {
+            $subscription->setType(Subscription::BASIC);
+        }
 
         return $subscription;
     }

@@ -98,6 +98,9 @@ class SubscribeController extends AbstractController
 
                 $this->em->persist($subscription);
                 $this->em->flush();
+
+                $this->addFlash('success', 'You are successfully subscribed.');
+                return $this->redirectToRoute('home');
             } catch (ApiErrorException $e) {
                 $this->addFlash('error', 'Failed request.');
             }
