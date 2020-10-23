@@ -34,6 +34,7 @@
                             {% if is_granted('ROLE_ADMIN') %}
                                 <a class="dropdown-item" href="{{ path('admin') }}">{{ 'Admin Panel'|trans }}</a>
                             {% endif %}
+                            <a class="dropdown-item" href="{{ path('subscribe') }}">{{ 'Subscribe'|trans }}</a>
                             <a class="dropdown-item" href="{{ path('company.create') }}">{{ 'Register your company'|trans }}</a>
                             <a class="dropdown-item" href="{{ path('summary.create') }}">Post your summary</a>
                             <a class="dropdown-item" href="{{ path('affiliate.create') }}">{{ 'Become an affiliates'|trans }}</a>
@@ -67,6 +68,7 @@
 
 <main class="app-content py-3">
     <div class="container">
+        {% include '_flashes.html.twig' %}
         {% block body %}{% endblock %}
     </div>
 </main>

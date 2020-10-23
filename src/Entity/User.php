@@ -23,6 +23,8 @@ class User implements UserInterface, EquatableInterface
     public const ROLE_ADMIN = 'ROLE_ADMIN';
     public const ROLE_WORKER = 'ROLE_WORKER';
     public const ROLE_COMPANY = 'ROLE_COMPANY';
+    public const ROLE_SUBSCRIBER = 'ROLE_SUBSCRIBER';
+    public const ROLE_PREMIUM_SUBSCRIBER = 'ROLE_PREMIUM_SUBSCRIBER';
 
     /**
      * @ORM\Id
@@ -76,12 +78,19 @@ class User implements UserInterface, EquatableInterface
     private $companies;
 
     /**
+     * @var Subscription
+     *
+     * @ORM\OneToOne(targetEntity="App\Entity\Subscription", mappedBy="user", orphanRemoval=true, cascade={"all"})
+     */
+    private $subscription;
+
+    /**
      * User constructor.
      */
     public function __construct()
     {
         $this->feedbacks = new ArrayCollection();
-        $this->networks = new ArrayCollection();
+        $this->networks  = new ArrayCollection();
         $this->summaries = new ArrayCollection();
         $this->companies = new ArrayCollection();
     }
@@ -293,9 +302,34 @@ class User implements UserInterface, EquatableInterface
         return $this;
     }
 
+    /**
+     * @param Company $company
+     *
+     * @return $this
+     */
     public function removeCompany(Company $company): self
     {
         $this->companies->removeElement($company);
+
+        return $this;
+    }
+
+    /**
+     * @return Subscription
+     */
+    public function getSubscription(): ?Subscription
+    {
+        return $this->subscription;
+    }
+
+    /**
+     * @param Subscription $subscription
+     *
+     * @return $this
+     */
+    public function setSubscription(Subscription $subscription): self
+    {
+        $this->subscription = $subscription;
 
         return $this;
     }

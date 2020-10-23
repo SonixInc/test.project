@@ -11,6 +11,10 @@ parameters:
     companies_directory: '%kernel.project_dir%/public/uploads/companies'
     companies_web_directory: '/uploads/companies'
     max_per_page: 10
+    stripe_pub_key: '%env(STRIPE_PUBLISHABLE_KEY)%'
+    stripe_secret_key: '%env(STRIPE_SECRET_KEY)%'
+    basic_subscribe_key: 'price_1Hf3HeA6grEwLRo5yLfhlMQQ'
+    premium_subscribe_key: 'price_1HfLpJA6grEwLRo5Q8s5mICS'
 
 services:
     # default configuration for services in *this* file
@@ -61,3 +65,6 @@ services:
     App\EventListener\AffiliateTokenListener:
         tags:
             - { name: doctrine.event_listener, event: prePersist }
+
+    Stripe\StripeClient:
+        arguments: ['%stripe_secret_key%']
