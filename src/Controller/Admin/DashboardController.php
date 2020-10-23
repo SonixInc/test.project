@@ -6,6 +6,7 @@ use App\Entity\Affiliate;
 use App\Entity\Category;
 use App\Entity\Company;
 use App\Entity\Job;
+use App\Entity\Subscription;
 use App\Entity\Summary;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
@@ -67,6 +68,7 @@ class DashboardController extends AbstractDashboardController
 
             MenuItem::section('User'),
             MenuItem::linkToCrud('Users', 'fa fa-user', User::class),
+            MenuItem::linkToCrud('Subscriptions', 'fa fa-grip-vertical', Subscription::class),
         ];
     }
 }
