@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-3 bg-light">
+            <div class="card">
+                <div class="card-header"><h4>Chat</h4></div>
+                <div id="chat-output" class="card-body"></div>
+                <div class="card-footer">
+                    <div class="form-group">
+                        <textarea class="form-control" id="chat_input"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+    $(function($){
+        // Websocket
+        let websocket_server = new WebSocket("ws://localhost:8080/");
+        websocket_server.onopen = function(e) {
+            console.log("Connection established!");
+        };
+        websocket_server.onerror = function(e) {
+            // Errorhandling
+        }
+        websocket_server.onmessage = function(e)
+        {
+            let data = JSON.parse(e.data);
+
+            let wrapper = document.createElement('div');
+            let username = document.createElement('span');
+            let message = document.createElement('span');
+
+            username.append(data.username + ': ');
+            message.append(data.msg);
+
+            wrapper.append(username);
+            wrapper.append(message);
+
+            $('#chat-output').append(wrapper);
+
+        }
+        // Events
+        $('#chat_input').on('keyup',function(e) {
+
+            if(e.keyCode === 13 && !e.shiftKey) {
+                let chat_msg = $(this).val();
+                let username = '{{ app.user.username }}';
+
+                websocket_server.send(JSON.stringify({
+                    'username': username,
+                    'msg': chat_msg
+                }));
+                $(this).val('');
+            }
+        });
+    });
+</script>
+{% endblock %}
