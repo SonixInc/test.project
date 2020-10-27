@@ -3,13 +3,19 @@
 
 namespace App\Command;
 
-use App\Chat\Chat;
+use App\Chat\BasePusher;
+use App\Chat\Pusher;
 use Ratchet\Http\HttpServer;
 use Ratchet\Server\IoServer;
+use Ratchet\Wamp\WampServer;
 use Ratchet\WebSocket\WsServer;
+use React\EventLoop\Factory;
+use React\Socket\Server;
+use React\ZMQ\Context;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use ZMQ;
 
 /**
  * Class StartChatCommand
@@ -39,15 +45,28 @@ class StartChatCommand extends Command
             'Starting chat, open your browser.',
         ]);
 
-        $server = IoServer::factory(
+        $loop   = Factory::create();
+        $pusher = new BasePusher();
+
+        // Listen for the web server to make a ZeroMQ push after an ajax request
+        $context = new Context($loop);
+        $pull = $context->getSocket(ZMQ::SOCKET_PULL);
+        $pull->bind('tcp://127.0.0.1:5555'); // Binding to 127.0.0.1 means the only client that can connect is itself
+        $pull->on('message', [$pusher, 'broadcast']);
+
+        // Set up our WebSocket server for clients wanting real-time updates
+        $webSock = new Server('0.0.0.0:8080', $loop); // Binding to 0.0.0.0 means remotes can connect
+        $webServer = new IoServer(
             new HttpServer(
                 new WsServer(
-                    new Chat()
+                    new WampServer(
+                        $pusher
+                    )
                 )
             ),
-            8080
+            $webSock
         );
 
-        $server->run();
+        $loop->run();
     }
 }

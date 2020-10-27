@@ -2,13 +2,20 @@
 
 {% block body %}
     <div class="row">
-        <div class="col-3 bg-light">
+        <div class="col-4 bg-light">
             <div class="card">
                 <div class="card-header"><h4>Chat</h4></div>
-                <div id="chat-output" class="card-body"></div>
+                <div id="chat-output" class="card-body">
+                    {% for message in messages %}
+                        <div>
+                            <span>{{ message.user }}: </span>
+                            <span>{{ message.content }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
                 <div class="card-footer">
                     <div class="form-group">
-                        <textarea class="form-control" id="chat_input"></textarea>
+                        <input name="content" id="chat_input" class="form-control">
                     </div>
                 </div>
             </div>
@@ -17,47 +24,54 @@
 {% endblock %}
 
 {% block javascripts %}
-<script type="text/javascript">
-    $(function($){
-        // Websocket
-        let websocket_server = new WebSocket("ws://localhost:8080/");
-        websocket_server.onopen = function(e) {
-            console.log("Connection established!");
-        };
-        websocket_server.onerror = function(e) {
-            // Errorhandling
-        }
-        websocket_server.onmessage = function(e)
-        {
-            let data = JSON.parse(e.data);
 
-            let wrapper = document.createElement('div');
-            let username = document.createElement('span');
-            let message = document.createElement('span');
+    <script>
+        let conn = new ab.Session('ws://localhost:8080',
+            function() {
+                conn.subscribe('onNewMessage', function(topic, data) {
+                    let wrapper = document.createElement('div');
+                    let username = document.createElement('span');
+                    let message = document.createElement('span');
 
-            username.append(data.username + ': ');
-            message.append(data.msg);
+                    username.append(data.username + ': ');
+                    message.append(data.message);
 
-            wrapper.append(username);
-            wrapper.append(message);
+                    wrapper.append(username);
+                    wrapper.append(message);
 
-            $('#chat-output').append(wrapper);
+                    $('#chat-output').append(wrapper);
 
-        }
-        // Events
+                });
+            },
+            function() {
+                console.warn('WebSocket connection closed');
+            },
+            {'skipSubprotocolCheck': true}
+        );
+
+        console.log(conn);
+
         $('#chat_input').on('keyup',function(e) {
+            if (e.keyCode === 13 && !e.shiftKey) {
+                let content = $(this).val();
+                let xhr = new XMLHttpRequest();
 
-            if(e.keyCode === 13 && !e.shiftKey) {
-                let chat_msg = $(this).val();
-                let username = '{{ app.user.username }}';
+                xhr.open('POST', 'chat');
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
-                websocket_server.send(JSON.stringify({
-                    'username': username,
-                    'msg': chat_msg
-                }));
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        conn.publish(JSON.stringify({
+                            username: '{{ app.user.username }}',
+                            message: content
+                        }));
+                    }
+                }
+
+                xhr.send('content=' + content);
                 $(this).val('');
             }
         });
-    });
-</script>
+
+    </script>
 {% endblock %}
