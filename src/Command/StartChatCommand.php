@@ -3,7 +3,7 @@
 
 namespace App\Command;
 
-use App\Chat\BasePusher;
+use App\Chat\Pusher;
 use Ratchet\Http\HttpServer;
 use Ratchet\Server\IoServer;
 use Ratchet\Session\SessionProvider;
@@ -17,6 +17,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Session\Storage\Handler\NullSessionHandler;
+use Symfony\Component\Security\Core\Security;
 use ZMQ;
 
 /**
@@ -30,11 +31,22 @@ class StartChatCommand extends Command
      * @var EventDispatcherInterface
      */
     private $dispatcher;
+    /**
+     * @var \SessionHandler
+     */
+    private $handler;
 
-    public function __construct(EventDispatcherInterface $dispatcher)
+    /**
+     * StartChatCommand constructor.
+     *
+     * @param EventDispatcherInterface $dispatcher
+     * @param \SessionHandlerInterface $handler
+     */
+    public function __construct(EventDispatcherInterface $dispatcher, \SessionHandlerInterface $handler)
     {
         parent::__construct();
         $this->dispatcher = $dispatcher;
+        $this->handler = $handler;
     }
 
     protected function configure(): void
@@ -49,6 +61,8 @@ class StartChatCommand extends Command
     /**
      * @param InputInterface  $input
      * @param OutputInterface $output
+     *
+     * @throws \ZMQSocketException
      */
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
@@ -59,7 +73,7 @@ class StartChatCommand extends Command
         ]);
 
         $loop   = Factory::create();
-        $pusher = new BasePusher($this->dispatcher);
+        $pusher = new Pusher($this->dispatcher);
 
         // Listen for the web server to make a ZeroMQ push after an ajax request
         $context = new Context($loop);
@@ -77,9 +91,8 @@ class StartChatCommand extends Command
                             $pusher
                         )
                     ),
-                    new NullSessionHandler()
+                    $this->handler
                 )
-
             ),
             $webSock
         );

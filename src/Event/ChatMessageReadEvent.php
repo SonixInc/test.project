@@ -15,18 +15,27 @@ use Symfony\Contracts\EventDispatcher\Event;
 class ChatMessageReadEvent extends Event
 {
     public const NAME = 'chat.message.read';
-    /**
-     * @var User
-     */
-    private User $user;
 
-    public function __construct(User $user)
+    /**
+     * @var int
+     */
+    private $userId;
+
+    /**
+     * ChatMessageReadEvent constructor.
+     *
+     * @param int $userId
+     */
+    public function __construct(int $userId)
     {
-        $this->user = $user;
+        $this->userId = $userId;
     }
 
-    public function getUser(): User
+    /**
+     * @return int
+     */
+    public function getUserId(): int
     {
-        return $this->user;
+        return $this->userId;
     }
 }
