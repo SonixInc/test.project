@@ -3,6 +3,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -40,11 +41,11 @@ class Message
     private $user;
 
     /**
-     * @var bool
+     * @var ArrayCollection|UserMessage[]
      *
-     * @ORM\Column(type="boolean")
+     * @ORM\OneToMany(targetEntity="UserMessage", mappedBy="message", orphanRemoval=true, cascade={"all"})
      */
-    private $viewed;
+    private $userMessages;
 
     /**
      * @var \DateTimeImmutable
@@ -58,7 +59,7 @@ class Message
      */
     public function __construct()
     {
-        $this->viewed = false;
+        $this->userMessages = new ArrayCollection();
     }
 
     /**
@@ -110,21 +111,35 @@ class Message
     }
 
     /**
-     * @return bool
+     * @return array
      */
-    public function isViewed(): ?bool
+    public function getUserMessages(): array
     {
-        return $this->viewed;
+        return $this->userMessages->toArray();
     }
 
     /**
-     * @param bool $viewed
+     * @param UserMessage $userMessage
      *
      * @return $this
      */
-    public function setViewed(bool $viewed): self
+    public function addUserMessage(UserMessage $userMessage): self
     {
-        $this->viewed = $viewed;
+        if (!$this->userMessages->contains($userMessage)) {
+            $this->userMessages->add($userMessage);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param UserMessage $userMessage
+     *
+     * @return $this
+     */
+    public function removeUserMessage(UserMessage $userMessage): self
+    {
+        $this->userMessages->removeElement($userMessage);
 
         return $this;
     }

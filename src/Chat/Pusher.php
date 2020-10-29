@@ -4,9 +4,13 @@
 namespace App\Chat;
 
 use App\Entity\Message;
+use App\Event\ChatMessageReadEvent;
 use Doctrine\ORM\EntityManagerInterface;
 use Ratchet\ConnectionInterface;
 use Ratchet\Wamp\WampServerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Security\Core\Security;
 use ZMQ;
 use ZMQContext;
 
@@ -15,7 +19,7 @@ use ZMQContext;
  *
  * @package App\Chat
  */
-class BasePusher implements WampServerInterface
+class Pusher implements WampServerInterface
 {
     protected $subscribedTopics = [];
 
@@ -23,13 +27,25 @@ class BasePusher implements WampServerInterface
      * @var \SplObjectStorage
      */
     private $clients;
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $dispatcher;
+    /**
+     * @var array
+     */
+    private $users;
 
     /**
      * Chat constructor.
+     *
+     * @param EventDispatcherInterface $dispatcher
      */
-    public function __construct()
+    public function __construct(EventDispatcherInterface $dispatcher)
     {
         $this->clients = new \SplObjectStorage();
+        $this->dispatcher = $dispatcher;
+        $this->users = [];
     }
 
     /**
@@ -38,6 +54,10 @@ class BasePusher implements WampServerInterface
      */
     public function onSubscribe(ConnectionInterface $conn, $topic): void
     {
+        foreach ($this->users as $userId) {
+            $this->dispatcher->dispatch(new ChatMessageReadEvent($userId));
+        }
+
         $this->subscribedTopics[$topic->getId()] = $topic;
     }
 
@@ -54,8 +74,11 @@ class BasePusher implements WampServerInterface
      */
     public function onOpen(ConnectionInterface $conn): void
     {
+        parse_str($conn->httpRequest->getUri()->getQuery(), $queryParameters);
         // Store the new connection to send messages to later
         $this->clients->attach($conn);
+
+        $this->users[$conn->resourceId] = $queryParameters['token'];
 
         echo "New connection! ({$conn->resourceId})\n";
     }
@@ -67,6 +90,8 @@ class BasePusher implements WampServerInterface
     {
         // The connection is closed, remove it, as we can no longer send it messages
         $this->clients->detach($conn);
+
+        unset($this->users[$conn->resourceId]);
 
         echo "Connection {$conn->resourceId} has disconnected\n";
     }
@@ -95,17 +120,15 @@ class BasePusher implements WampServerInterface
     public function onPublish(ConnectionInterface $conn, $topic, $event, array $exclude, array $eligible): void
     {
         $data   = json_decode($topic, true);
-        $viewed = false;
 
-        if ($this->clients->count() > 1) {
-            $viewed = true;
+        foreach ($this->users as $userId) {
+            $this->dispatcher->dispatch(new ChatMessageReadEvent($userId));
         }
 
         $this->sendDataToServer([
             'chat'     => 'onNewMessage',
             'username' => $data['username'],
             'message'  => $data['message'],
-            'viewed'   => $viewed
         ]);
     }
 

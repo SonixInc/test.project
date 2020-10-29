@@ -5,13 +5,15 @@
         <div class="col-4 bg-light">
             <div class="card">
                 <div class="card-header"><h4>Chat</h4></div>
-                <div id="chat-output" class="card-body">
-                    {% for message in messages %}
-                        <div>
-                            <span>{{ message.user }}: </span>
-                            <span>{{ message.content }}</span>
-                        </div>
-                    {% endfor %}
+                <div class="card-body">
+                    <div id="chat-output" class="chat">
+                        {% for message in messages %}
+                            <div>
+                                <span>{{ message.user }}: </span>
+                                <span>{{ message.content }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
                 <div class="card-footer">
                     <div class="form-group">
@@ -26,7 +28,7 @@
 {% block javascripts %}
 
     <script>
-        let conn = new ab.Session('ws://localhost:8080',
+        let conn = new ab.Session('ws://localhost:8080?token={{ token }}',
             function() {
                 conn.subscribe('onNewMessage', function(topic, data) {
                     let wrapper = document.createElement('div');

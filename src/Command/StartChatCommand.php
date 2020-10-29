@@ -3,10 +3,10 @@
 
 namespace App\Command;
 
-use App\Chat\BasePusher;
 use App\Chat\Pusher;
 use Ratchet\Http\HttpServer;
 use Ratchet\Server\IoServer;
+use Ratchet\Session\SessionProvider;
 use Ratchet\Wamp\WampServer;
 use Ratchet\WebSocket\WsServer;
 use React\EventLoop\Factory;
@@ -15,6 +15,7 @@ use React\ZMQ\Context;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use ZMQ;
 
 /**
@@ -24,6 +25,28 @@ use ZMQ;
  */
 class StartChatCommand extends Command
 {
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $dispatcher;
+    /**
+     * @var \SessionHandler
+     */
+    private $handler;
+
+    /**
+     * StartChatCommand constructor.
+     *
+     * @param EventDispatcherInterface $dispatcher
+     * @param \SessionHandlerInterface $handler
+     */
+    public function __construct(EventDispatcherInterface $dispatcher, \SessionHandlerInterface $handler)
+    {
+        parent::__construct();
+        $this->dispatcher = $dispatcher;
+        $this->handler = $handler;
+    }
+
     protected function configure(): void
     {
         $this->setName('sockets:start-chat')
@@ -36,6 +59,8 @@ class StartChatCommand extends Command
     /**
      * @param InputInterface  $input
      * @param OutputInterface $output
+     *
+     * @throws \ZMQSocketException
      */
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
@@ -46,7 +71,7 @@ class StartChatCommand extends Command
         ]);
 
         $loop   = Factory::create();
-        $pusher = new BasePusher();
+        $pusher = new Pusher($this->dispatcher);
 
         // Listen for the web server to make a ZeroMQ push after an ajax request
         $context = new Context($loop);
@@ -58,10 +83,13 @@ class StartChatCommand extends Command
         $webSock = new Server('0.0.0.0:8080', $loop); // Binding to 0.0.0.0 means remotes can connect
         $webServer = new IoServer(
             new HttpServer(
-                new WsServer(
-                    new WampServer(
-                        $pusher
-                    )
+                new SessionProvider(
+                    new WsServer(
+                        new WampServer(
+                            $pusher
+                        )
+                    ),
+                    $this->handler
                 )
             ),
             $webSock
