@@ -41,6 +41,14 @@ class Message
     private $user;
 
     /**
+     * @var Chat
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\Chat", inversedBy="messages", cascade={"all"})
+     * @ORM\JoinColumn(name="chat_id", referencedColumnName="id", nullable=false)
+     */
+    private $chat;
+
+    /**
      * @var ArrayCollection|UserMessage[]
      *
      * @ORM\OneToMany(targetEntity="UserMessage", mappedBy="message", orphanRemoval=true, cascade={"all"})
@@ -106,6 +114,27 @@ class Message
     public function setUser(User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+
+    /**
+     * @return Chat
+     */
+    public function getChat(): ?Chat
+    {
+        return $this->chat;
+    }
+
+    /**
+     * @param Chat $chat
+     *
+     * @return $this
+     */
+    public function setChat(Chat $chat): self
+    {
+        $this->chat = $chat;
 
         return $this;
     }

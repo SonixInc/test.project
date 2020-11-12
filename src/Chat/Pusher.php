@@ -35,6 +35,10 @@ class Pusher implements WampServerInterface
      * @var array
      */
     private $users;
+    /**
+     * @var mixed
+     */
+    private $chatId;
 
     /**
      * Chat constructor.
@@ -57,6 +61,10 @@ class Pusher implements WampServerInterface
         foreach ($this->users as $userId) {
             $this->dispatcher->dispatch(new ChatMessageReadEvent($userId));
         }
+
+        parse_str($conn->httpRequest->getUri()->getQuery(), $queryParameters);
+
+        $this->chatId = $queryParameters['chat'];
 
         $this->subscribedTopics[$topic->getId()] = $topic;
     }
@@ -126,7 +134,7 @@ class Pusher implements WampServerInterface
         }
 
         $this->sendDataToServer([
-            'chat'     => 'onNewMessage',
+            'chat'     => 'onNewMessage_' . $this->chatId,
             'username' => $data['username'],
             'message'  => $data['message'],
         ]);

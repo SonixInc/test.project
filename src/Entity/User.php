@@ -84,6 +84,8 @@ class User implements UserInterface, EquatableInterface
      */
     private $subscription;
 
+    private $messages;
+
     /**
      * User constructor.
      */

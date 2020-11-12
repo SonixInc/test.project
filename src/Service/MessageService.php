@@ -3,6 +3,7 @@
 
 namespace App\Service;
 
+use App\Entity\Chat;
 use App\Entity\Message;
 use App\Entity\User;
 use App\Entity\UserMessage;
@@ -40,12 +41,16 @@ class MessageService
     /**
      * @param string $content
      * @param User   $author
+     * @param Chat   $chat
+     *
+     * @return Message
      */
-    public function createMessage(string $content, User $author): void
+    public function createMessage(string $content, User $author, Chat $chat): Message
     {
         $users = $this->userRepository->findAll();
 
         $message = new Message();
+        $message->setChat($chat);
         $message->setContent($content);
         $message->setUser($author);
         $message->setCreatedAt(new \DateTimeImmutable());
@@ -57,5 +62,7 @@ class MessageService
 
         $this->em->persist($message);
         $this->em->flush();
+
+        return $message;
     }
 }

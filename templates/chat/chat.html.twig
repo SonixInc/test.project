@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-4 bg-light">
+            <div class="card">
+                <div class="card-header"><h4>Chat</h4></div>
+                <div class="card-body">
+                    <div id="chat-output" class="chat">
+                        {% for message in messages %}
+                            <div>
+                                <span>{{ message.user }}: </span>
+                                <span>{{ message.content }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="form-group">
+                        <input name="content" id="chat_input" class="form-control">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        let conn = new ab.Session('ws://localhost:8080?token={{ token }}&chat={{ chat.id }}',
+            function() {
+                conn.subscribe('onNewMessage_{{ chat.id }}', function(topic, data) {
+                    let wrapper = document.createElement('div');
+                    let username = document.createElement('span');
+                    let message = document.createElement('span');
+
+                    console.log(data);
+
+                    username.append(data.username + ': ');
+                    message.append(data.message);
+
+                    wrapper.append(username);
+                    wrapper.append(message);
+
+                    $('#chat-output').append(wrapper);
+
+                });
+            },
+            function() {
+                console.warn('WebSocket connection closed');
+            },
+            {'skipSubprotocolCheck': true}
+        );
+
+        console.log(conn);
+
+        $('#chat_input').on('keyup',function(e) {
+            if (e.keyCode === 13 && !e.shiftKey) {
+                let content = $(this).val();
+                let xhr = new XMLHttpRequest();
+
+                xhr.open('POST', '{{ path('chat.chat', {'id': chat.id}) }}');
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        conn.publish(JSON.stringify({
+                            username: '{{ app.user.username }}',
+                            message: content
+                        }));
+                    }
+                }
+
+                xhr.send('content=' + content);
+                $(this).val('');
+            }
+        });
+
+    </script>
+{% endblock %}
