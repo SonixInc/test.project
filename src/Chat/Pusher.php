@@ -133,10 +133,22 @@ class Pusher implements WampServerInterface
             $this->dispatcher->dispatch(new ChatMessageReadEvent($userId));
         }
 
+        if (!empty($data['event']) && $data['event'] === 'delete') {
+            $this->sendDataToServer([
+                'chat'     => 'onNewMessage_' . $this->chatId,
+                'messageId' => $data['message_id'],
+                'message'  => 'Message delete',
+                'messageDelete'  => true,
+            ]);
+
+            return;
+        }
+
         $this->sendDataToServer([
             'chat'     => 'onNewMessage_' . $this->chatId,
             'username' => $data['username'],
-            'message'  => $data['message'],
+            'messageId' => $data['message_id'],
+            'message'  => $data['content'],
         ]);
     }
 

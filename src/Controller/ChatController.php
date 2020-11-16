@@ -4,10 +4,12 @@
 namespace App\Controller;
 
 use App\Entity\Chat;
+use App\Entity\Message;
 use App\Entity\User;
 use App\Form\ChatType;
 use App\Service\MessageService;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -98,7 +100,7 @@ class ChatController extends AbstractController
         }
 
         return $this->render('chat/create.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 
@@ -124,15 +126,48 @@ class ChatController extends AbstractController
         if ($request->isMethod('POST')) {
             $content = $request->request->get('content');
 
-            $messageService->createMessage($content, $user, $chat);
+            $message = $messageService->createMessage($content, $user, $chat);
 
-            return $this->redirectToRoute('chat.chat', ['id' => $chat->getId()]);
+            return $this->json([
+                'message' => [
+                    'id'      => $message->getId(),
+                    'content' => $message->getContent(),
+                ],
+                'user'    => [
+                    'username' => $user->getUsername(),
+                ],
+            ]);
         }
 
         return $this->render('chat/chat.html.twig', [
-            'chat' => $chat,
+            'chat'     => $chat,
             'messages' => $chat->getMessages(),
-            'token'    => $user->getId()
+            'token'    => $user->getId(),
         ]);
+    }
+
+    /**
+     * @Route(
+     *     "chat/{id}/message/{message_id}",
+     *     name="chat.message.delete",
+     *     methods={"DELETE"},
+     *     requirements={"id" = "\d+", "message_id" = "\d+"}
+     * )
+     * @ParamConverter("message", options={"id" = "message_id"})
+     *
+     * @param Request $request
+     * @param Chat    $chat
+     * @param Message $message
+     *
+     * @return Response
+     */
+    public function deleteChatMessage(Request $request, Chat $chat, Message $message): Response
+    {
+        if ($this->isCsrfTokenValid('delete' . $message->getId(), $request->request->get('_token'))) {
+            $this->em->remove($message);
+            $this->em->flush();
+        }
+
+        return $this->redirectToRoute('chat.chat', ['id' => $chat->getId()]);
     }
 }

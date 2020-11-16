@@ -43,7 +43,7 @@ class Message
     /**
      * @var Chat
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Chat", inversedBy="messages", cascade={"all"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Chat", inversedBy="messages")
      * @ORM\JoinColumn(name="chat_id", referencedColumnName="id", nullable=false)
      */
     private $chat;

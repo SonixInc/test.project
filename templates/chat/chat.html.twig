@@ -9,8 +9,10 @@
                     <div id="chat-output" class="chat">
                         {% for message in messages %}
                             <div>
-                                <span>{{ message.user }}: </span>
-                                <span>{{ message.content }}</span>
+                                <span class="dropdown">{{ message.user }}: </span>
+                                <span data-message="{{ message.id }}">{{ message.content }}</span>
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ message.id) }}">
+                                <button data-button="{{ message.id }}" class="delete-message">Delete</button>
                             </div>
                         {% endfor %}
                     </div>
@@ -27,34 +29,55 @@
 
 {% block javascripts %}
     <script>
+        let delete_buttons = document.querySelectorAll('.delete-message');
         let conn = new ab.Session('ws://localhost:8080?token={{ token }}&chat={{ chat.id }}',
-            function() {
-                conn.subscribe('onNewMessage_{{ chat.id }}', function(topic, data) {
-                    let wrapper = document.createElement('div');
-                    let username = document.createElement('span');
-                    let message = document.createElement('span');
+            function () {
+                conn.subscribe('onNewMessage_{{ chat.id }}', function (topic, data) {
+                    if (data.messageDelete) {
+                        let message = document.querySelector('[data-message="' + data.messageId + '"]');
+                        let button = document.querySelector('[data-button="' + data.messageId + '"]');
+                        let wrapper = message.parentElement;
 
-                    console.log(data);
+                        message.innerText = data.message;
+                        wrapper.removeChild(button);
+                    } else {
+                        let wrapper = document.createElement('div');
+                        let username = document.createElement('span');
+                        let message = document.createElement('span');
+                        let jar = document.createElement('button');
+                        let tokenInput = document.createElement('input');
 
-                    username.append(data.username + ': ');
-                    message.append(data.message);
+                        tokenInput.setAttribute('type', 'hidden');
+                        tokenInput.setAttribute('name', '_token');
+                        tokenInput.setAttribute('value', '{{ csrf_token('delete') }}')
 
-                    wrapper.append(username);
-                    wrapper.append(message);
+                        message.dataset.message = data.messageId;
 
-                    $('#chat-output').append(wrapper);
+                        jar.classList.add('delete-message');
+                        jar.dataset.button = data.messageId;
 
+                        username.append(data.username + ': ');
+                        message.append(data.message);
+                        jar.append('Delete');
+
+                        wrapper.append(username);
+                        wrapper.append(message);
+                        wrapper.append(tokenInput);
+                        wrapper.append(jar);
+
+                        addEvent(jar);
+
+                        $('#chat-output').append(wrapper);
+                    }
                 });
             },
-            function() {
+            function () {
                 console.warn('WebSocket connection closed');
             },
             {'skipSubprotocolCheck': true}
         );
 
-        console.log(conn);
-
-        $('#chat_input').on('keyup',function(e) {
+        $('#chat_input').on('keyup', function (e) {
             if (e.keyCode === 13 && !e.shiftKey) {
                 let content = $(this).val();
                 let xhr = new XMLHttpRequest();
@@ -64,9 +87,12 @@
 
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState === 4 && xhr.status === 200) {
+                        let response = JSON.parse(xhr.responseText);
+
                         conn.publish(JSON.stringify({
-                            username: '{{ app.user.username }}',
-                            message: content
+                            message_id: response.message.id,
+                            content: response.message.content,
+                            username: response.user.username
                         }));
                     }
                 }
@@ -75,6 +101,36 @@
                 $(this).val('');
             }
         });
+
+        delete_buttons.forEach(button => {
+            addEvent(button);
+        });
+
+        function addEvent(button) {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+                let message_id = this.dataset.button;
+                let xhr = new XMLHttpRequest();
+                let token = this.parentElement.querySelector('[name="_token"]').value;
+                let url = '{{ path('chat.message.delete', {'id': chat.id, 'message_id': 0}) }}'
+
+                url = url.replace('0', message_id);
+
+                xhr.open('POST', url);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        conn.publish(JSON.stringify({
+                            message_id: message_id,
+                            event: 'delete',
+                        }));
+                    }
+                }
+
+                xhr.send('_method=DELETE&_token=' + token);
+            });
+        }
 
     </script>
 {% endblock %}
