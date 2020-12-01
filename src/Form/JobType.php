@@ -70,6 +70,12 @@ class JobType extends AbstractType
                     new Length(['max' => 255]),
                 ]
             ])
+            ->add('address', TextType::class, [
+                'constraints' => [
+                    new NotBlank(),
+                    new Length(['max' => 255]),
+                ]
+            ])
             ->add('description', TextareaType::class, [
                 'constraints' => [
                     new NotBlank(),

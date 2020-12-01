@@ -39,6 +39,7 @@ class JobFixtures extends Fixture implements DependentFixtureInterface
         $jobSensioLabs->setCompany($company1);
         $jobSensioLabs->setPosition('Web Developer');
         $jobSensioLabs->setLocation('Paris, France');
+        $jobSensioLabs->setAddress('11 Rue Greuze');
         $jobSensioLabs->setDescription('You\'ve already developed websites with symfony and you want to work with Open-Source technologies. You have a minimum of 3 years experience in web development with PHP or Java and you wish to participate to development of Web 2.0 sites using the best frameworks available.');
         $jobSensioLabs->setHowToApply('Send your resume to fabien.potencier [at] sensio.com');
         $jobSensioLabs->setPublic(true);
@@ -56,6 +57,7 @@ class JobFixtures extends Fixture implements DependentFixtureInterface
         $jobExtremeSensio->setCompany($company2);
         $jobExtremeSensio->setPosition('Web Designer');
         $jobExtremeSensio->setLocation('Paris, France');
+        $jobExtremeSensio->setAddress('11 Rue Greuze');
         $jobExtremeSensio->setDescription('Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in.');
         $jobExtremeSensio->setHowToApply('Send your resume to fabien.potencier [at] sensio.com');
         $jobExtremeSensio->setPublic(true);
@@ -71,6 +73,7 @@ class JobFixtures extends Fixture implements DependentFixtureInterface
         $jobExpired->setCompany($company2);
         $jobExpired->setPosition('Web Developer Expired');
         $jobExpired->setLocation('Paris, France');
+        $jobExpired->setAddress('11 Rue Greuze');
         $jobExpired->setDescription('Lorem ipsum dolor sit amet, consectetur adipisicing elit.');
         $jobExpired->setHowToApply('Send your resume to lorem.ipsum [at] dolor.sit');
         $jobExpired->setPublic(true);
@@ -87,6 +90,7 @@ class JobFixtures extends Fixture implements DependentFixtureInterface
             $job->setCompany($company1);
             $job->setPosition('Web Developer');
             $job->setLocation('Paris, France');
+            $job->setAddress('11 Rue Greuze');
             $job->setDescription('Lorem ipsum dolor sit amet, consectetur adipisicing elit.');
             $job->setHowToApply('Send your resume to lorem.ipsum [at] dolor.sit');
             $job->setPublic(true);

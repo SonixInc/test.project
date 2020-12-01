@@ -106,6 +106,18 @@ class Job
     /**
      * @var string
      *
+     * @ORM\Column(type="string")
+     *
+     * @Groups("write")
+     *
+     * @Assert\NotBlank()
+     * @Assert\Length(max="255")
+     */
+    private $address;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(type="text")
      *
      * @Groups("write")
@@ -321,6 +333,26 @@ class Job
     public function setLocation(string $location): self
     {
         $this->location = $location;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    /**
+     * @param string $address
+     *
+     * @return $this
+     */
+    public function setAddress(string $address): self
+    {
+        $this->address = $address;
 
         return $this;
     }

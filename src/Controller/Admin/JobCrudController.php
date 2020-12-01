@@ -38,7 +38,8 @@ class JobCrudController extends AbstractCrudController
     {
         return $crud
             ->setPaginatorPageSize($this->getParameter('max_per_page'))
-            ->overrideTemplate('crud/index', 'bundles/easyadmin/index.html.twig');
+            ->overrideTemplate('crud/index', 'bundles/easyadmin/job/index.html.twig')
+            ->overrideTemplate('crud/detail', 'bundles/easyadmin/job/detail.html.twig');
     }
 
     /**
@@ -57,13 +58,14 @@ class JobCrudController extends AbstractCrudController
             Field\AssociationField::new('company'),
             Field\TextField::new('position'),
             Field\TextField::new('location'),
+            Field\TextField::new('address')->hideOnIndex(),
             Field\TextEditorField::new('description')->hideOnIndex(),
             Field\TextField::new('howToApply', 'How to apply?')->hideOnIndex(),
             Field\BooleanField::new('public', 'Public?')->hideOnIndex(),
             Field\TextField::new('email'),
             Field\BooleanField::new('activated'),
             Field\AssociationField::new('category'),
-            Field\DateTimeField::new('createdAt')->hideOnForm()
+            Field\DateTimeField::new('createdAt')->hideOnForm(),
         ];
     }
 
