@@ -1,0 +1,57 @@
+version: '3'
+services:
+    jobeet-nginx:
+        build:
+            context: ./docker/development
+            dockerfile: nginx.docker
+        volumes:
+            - ./:/app
+        depends_on:
+            - jobeet-php-fpm
+        ports:
+            - "8080:80"
+    jobeet-php-fpm:
+        build:
+            context: ./docker/development
+            dockerfile: php-fpm.docker
+        volumes:
+            - ./:/app
+        depends_on:
+            - jobeet-mysql
+            - mailer
+    jobeet-php-cli:
+        build:
+            context: ./docker/development
+            dockerfile: php-cli.docker
+        volumes:
+            - ./:/app
+            - composer:/root/.composer/cache
+        depends_on:
+            - jobeet-mysql
+            - mailer
+    jobeet-node:
+        image: node:14.7.0-alpine
+        volumes:
+            - ./:/app
+        working_dir: /app
+    jobeet-mysql:
+        image: mysql:8.0.22
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: secret
+            MYSQL_USER: app
+            MYSQL_PASSWORD: secret
+            MYSQL_DATABASE: jobeet
+        volumes:
+            - jobeet-mysql:/var/lib/mysql
+        ports:
+            - "33061:3306"
+
+    mailer:
+        image: mailhog/mailhog
+        ports:
+            - "8082:8025"
+
+volumes:
+    jobeet-mysql:
+    composer:

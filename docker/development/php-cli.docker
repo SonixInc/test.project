@@ -1,0 +1,29 @@
+FROM php:7.4-cli
+
+RUN apt-get update && apt-get install -y \
+	git \
+	libpq-dev \
+	zlib1g-dev \
+	libzip-dev \
+	libzmq3-dev \
+	libicu-dev \
+	zip \
+    && docker-php-ext-install zip \
+    && docker-php-ext-install mysqli pdo pdo_mysql \
+    && docker-php-ext-configure intl \
+    && docker-php-ext-install intl
+
+RUN git clone git://github.com/mkoppanen/php-zmq.git \
+	&& cd php-zmq \
+	&& phpize && ./configure \
+	&& make \
+	&& make install \
+	&& cd .. \
+	&& rm -fr php-zmq
+RUN docker-php-ext-enable zmq
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/bin --filename=composer --quiet
+
+ENV COMPOSER_ALLOW_SUPERUSER 1
+
+WORKDIR /app
